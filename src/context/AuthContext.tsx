@@ -1,18 +1,15 @@
 
-import React, { createContext, useContext, useState } from "react";
-
-interface User {
-  id: string;
-  name: string;
-  email: string;
-}
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import type { User, Session } from '@supabase/supabase-js';
 
 interface AuthContextType {
   user: User | null;
+  session: Session | null;
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<boolean>;
   register: (name: string, email: string, password: string) => Promise<boolean>;
-  logout: () => void;
+  logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
@@ -20,29 +17,35 @@ const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(() => {
-    const savedUser = localStorage.getItem("user");
-    return savedUser ? JSON.parse(savedUser) : null;
-  });
-  
-  const isAuthenticated = user !== null;
+  const [user, setUser] = useState<User | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
+  const isAuthenticated = !!user;
+
+  useEffect(() => {
+    // Set up auth state listener
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        setSession(session);
+        setUser(session?.user ?? null);
+      }
+    );
+
+    // Check for existing session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   const login = async (email: string, password: string): Promise<boolean> => {
     try {
-      // This is a mock authentication - in a real app, this would call an API
-      // For demo purposes, we'll allow any login with minimal validation
-      if (email && password.length >= 6) {
-        const mockUser = {
-          id: `user-${Math.random().toString(36).substring(2, 9)}`,
-          name: email.split('@')[0],
-          email
-        };
-        
-        setUser(mockUser);
-        localStorage.setItem("user", JSON.stringify(mockUser));
-        return true;
-      }
-      return false;
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      return !error;
     } catch (error) {
       console.error("Login error:", error);
       return false;
@@ -51,32 +54,29 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const register = async (name: string, email: string, password: string): Promise<boolean> => {
     try {
-      // This is a mock registration - in a real app, this would call an API
-      if (name && email && password.length >= 6) {
-        const mockUser = {
-          id: `user-${Math.random().toString(36).substring(2, 9)}`,
-          name,
-          email
-        };
-        
-        setUser(mockUser);
-        localStorage.setItem("user", JSON.stringify(mockUser));
-        return true;
-      }
-      return false;
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            first_name: name
+          }
+        }
+      });
+      return !error;
     } catch (error) {
       console.error("Registration error:", error);
       return false;
     }
   };
 
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem("user");
+  const logout = async () => {
+    await supabase.auth.signOut();
   };
 
   const value = {
     user,
+    session,
     isAuthenticated,
     login,
     register,

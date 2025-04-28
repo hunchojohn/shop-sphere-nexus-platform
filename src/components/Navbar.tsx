@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useCart } from "@/context/CartContext";
@@ -73,6 +72,11 @@ const Navbar = () => {
           <Link to="/categories" className="text-gray-600 hover:text-blue-600">
             Categories
           </Link>
+          {isAuthenticated && (
+            <Link to="/admin" className="text-gray-600 hover:text-blue-600">
+              Admin
+            </Link>
+          )}
         </div>
 
         <div className="flex items-center space-x-3">
@@ -102,7 +106,9 @@ const Navbar = () => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem className="font-medium">{user?.name}</DropdownMenuItem>
+                <DropdownMenuItem className="font-medium">
+                  {user?.email}
+                </DropdownMenuItem>
                 <DropdownMenuItem>
                   <Link to="/account" className="w-full">My Account</Link>
                 </DropdownMenuItem>
@@ -113,114 +119,9 @@ const Navbar = () => {
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <>
-              <Dialog open={isLoginOpen} onOpenChange={setIsLoginOpen}>
-                <DialogTrigger asChild>
-                  <Button variant="ghost">Log In</Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Log In to Your Account</DialogTitle>
-                  </DialogHeader>
-                  <form onSubmit={handleLogin} className="space-y-4 pt-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="email">Email</Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="password">Password</Label>
-                      <Input
-                        id="password"
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                      />
-                    </div>
-                    <Button type="submit" className="w-full">
-                      Log In
-                    </Button>
-                    <div className="text-center text-sm">
-                      Don't have an account?{" "}
-                      <button
-                        type="button"
-                        className="text-blue-600 hover:underline"
-                        onClick={() => {
-                          setIsLoginOpen(false);
-                          setIsRegisterOpen(true);
-                        }}
-                      >
-                        Register
-                      </button>
-                    </div>
-                  </form>
-                </DialogContent>
-              </Dialog>
-
-              <Dialog open={isRegisterOpen} onOpenChange={setIsRegisterOpen}>
-                <DialogTrigger asChild>
-                  <Button>Register</Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Create an Account</DialogTitle>
-                  </DialogHeader>
-                  <form onSubmit={handleRegister} className="space-y-4 pt-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="register-name">Name</Label>
-                      <Input
-                        id="register-name"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="register-email">Email</Label>
-                      <Input
-                        id="register-email"
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="register-password">Password</Label>
-                      <Input
-                        id="register-password"
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                      />
-                    </div>
-                    <Button type="submit" className="w-full">
-                      Register
-                    </Button>
-                    <div className="text-center text-sm">
-                      Already have an account?{" "}
-                      <button
-                        type="button"
-                        className="text-blue-600 hover:underline"
-                        onClick={() => {
-                          setIsRegisterOpen(false);
-                          setIsLoginOpen(true);
-                        }}
-                      >
-                        Log In
-                      </button>
-                    </div>
-                  </form>
-                </DialogContent>
-              </Dialog>
-            </>
+            <Button variant="ghost" onClick={() => navigate('/auth')}>
+              Log In
+            </Button>
           )}
 
           <Button
