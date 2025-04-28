@@ -21,11 +21,14 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Users as UsersIcon } from 'lucide-react';
+import { Database } from '@/integrations/supabase/types';
+
+type UserRole = Database['public']['Enums']['user_role'];
 
 type UserWithProfile = {
   id: string;
   email: string;
-  role: string;
+  role: UserRole;
   first_name: string;
   last_name: string;
   created_at: string;
@@ -99,7 +102,7 @@ export default function AdminUsers() {
     }
   }, [user, navigate, toast]);
 
-  const updateUserRole = async (userId: string, newRole: string) => {
+  const updateUserRole = async (userId: string, newRole: UserRole) => {
     const { error } = await supabase
       .from('user_roles')
       .update({ role: newRole })
