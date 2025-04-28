@@ -1,5 +1,6 @@
+
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -10,49 +11,17 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 
 const Navbar = () => {
   const { openCart, getCartCount } = useCart();
-  const { user, isAuthenticated, login, register, logout } = useAuth();
-  const [isLoginOpen, setIsLoginOpen] = useState(false);
-  const [isRegisterOpen, setIsRegisterOpen] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
+  const { user, isAuthenticated, logout } = useAuth();
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
-
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (await login(email, password)) {
-      setIsLoginOpen(false);
-      setEmail("");
-      setPassword("");
-    }
-  };
-
-  const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (await register(name, email, password)) {
-      setIsRegisterOpen(false);
-      setName("");
-      setEmail("");
-      setPassword("");
-    }
-  };
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     console.log(`Searching for: ${searchTerm}`);
-    // In a real app, this would redirect to search results
   };
 
   return (
@@ -115,7 +84,12 @@ const Navbar = () => {
                 <DropdownMenuItem>
                   <Link to="/orders" className="w-full">My Orders</Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={logout}>Sign Out</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => {
+                  logout();
+                  navigate('/auth');
+                }}>
+                  Sign Out
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
