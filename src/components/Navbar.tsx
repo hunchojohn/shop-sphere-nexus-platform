@@ -12,6 +12,7 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import { ThemeToggle } from "@/components/ThemeProvider";
 
 const Navbar = () => {
   const { openCart, getCartCount } = useCart();
@@ -25,24 +26,24 @@ const Navbar = () => {
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-white border-b shadow-sm">
+    <header className="sticky top-0 z-40 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 shadow-sm">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         <Link to="/" className="flex items-center">
-          <h1 className="text-2xl font-bold text-blue-600">ShopSphere</h1>
+          <h1 className="text-2xl font-bold text-blue-600 dark:text-blue-400">ShopSphere</h1>
         </Link>
 
         <div className="hidden md:flex items-center space-x-4">
-          <Link to="/" className="text-gray-600 hover:text-blue-600">
+          <Link to="/" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
             Home
           </Link>
-          <Link to="/products" className="text-gray-600 hover:text-blue-600">
+          <Link to="/products" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
             Products
           </Link>
-          <Link to="/categories" className="text-gray-600 hover:text-blue-600">
+          <Link to="/categories" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
             Categories
           </Link>
           {isAuthenticated && (
-            <Link to="/admin" className="text-gray-600 hover:text-blue-600">
+            <Link to="/admin" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400">
               Admin
             </Link>
           )}
@@ -55,45 +56,47 @@ const Navbar = () => {
               placeholder="Search products..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-64"
+              className="w-64 bg-gray-100 dark:bg-gray-800 dark:text-white dark:border-gray-700"
             />
             <Button
               type="submit"
               variant="ghost"
               size="icon"
-              className="absolute right-0"
+              className="absolute right-0 dark:text-gray-300"
             >
               <Search className="h-4 w-4" />
             </Button>
           </form>
 
+          <ThemeToggle />
+
           {isAuthenticated ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon">
+                <Button variant="ghost" size="icon" className="dark:text-gray-300">
                   <User className="h-5 w-5" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem className="font-medium">
+              <DropdownMenuContent align="end" className="dark:bg-gray-800 dark:border-gray-700">
+                <DropdownMenuItem className="font-medium dark:text-gray-200">
                   {user?.email}
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem className="dark:text-gray-200 dark:hover:bg-gray-700">
                   <Link to="/account" className="w-full">My Account</Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem className="dark:text-gray-200 dark:hover:bg-gray-700">
                   <Link to="/orders" className="w-full">My Orders</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => {
                   logout();
                   navigate('/auth');
-                }}>
+                }} className="dark:text-gray-200 dark:hover:bg-gray-700">
                   Sign Out
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <Button variant="ghost" onClick={() => navigate('/auth')}>
+            <Button variant="ghost" onClick={() => navigate('/auth')} className="dark:text-gray-300">
               Log In
             </Button>
           )}
@@ -102,7 +105,7 @@ const Navbar = () => {
             variant="ghost"
             size="icon"
             onClick={openCart}
-            className="relative"
+            className="relative dark:text-gray-300"
           >
             <ShoppingCart className="h-5 w-5" />
             {getCartCount() > 0 && (

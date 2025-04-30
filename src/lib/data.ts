@@ -1,4 +1,3 @@
-
 // Mock product data
 export interface ProductVariant {
   id: string;
@@ -255,3 +254,23 @@ export const getProductsByCategory = (category: string): Product[] => {
 export const getFeaturedProducts = (): Product[] => {
   return products.filter(product => product.featured);
 };
+
+export function getAllProducts(): Product[] {
+  // This should return all products from your data source
+  // For now, we'll combine all category products
+  let allProducts: Product[] = [];
+  
+  categories.forEach(category => {
+    if (category !== "All") {
+      const categoryProducts = getProductsByCategory(category);
+      allProducts = [...allProducts, ...categoryProducts];
+    }
+  });
+  
+  // Remove duplicates (in case products appear in multiple categories)
+  const uniqueProducts = allProducts.filter((product, index, self) => 
+    index === self.findIndex((p) => p.id === product.id)
+  );
+  
+  return uniqueProducts;
+}

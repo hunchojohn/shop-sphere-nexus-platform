@@ -1,4 +1,5 @@
 
+
 /**
  * Format a number as Kenyan Shillings with thousand separators
  */
@@ -19,3 +20,4 @@ export const formatCurrencyStockX = (amount: number): string => {
 export const confirmAction = (message: string): boolean => {
   return window.confirm(message);
 };
+
