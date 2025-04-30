@@ -4,14 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
+import { Package, Plus } from 'lucide-react';
+import { Database } from '@/integrations/supabase/types';
 import {
   Card,
   CardContent,
@@ -20,10 +14,12 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Package, Edit, Trash2, Plus } from 'lucide-react';
-import { Database } from '@/integrations/supabase/types';
+import ProductList from '@/components/admin/products/ProductList';
+import ProductForm from '@/components/admin/products/ProductForm';
+import { confirmAction } from '@/utils/formatters';
 
 type Product = Database['public']['Tables']['products']['Row'];
+type ProductInput = Omit<Product, 'id' | 'created_at' | 'updated_at'>;
 
 export default function AdminProducts() {
   const { user } = useAuth();
@@ -77,7 +73,7 @@ export default function AdminProducts() {
     }
   }, [user, navigate, toast]);
 
-  const handleCreate = async (productData: Omit<Product, 'id' | 'created_at' | 'updated_at'>) => {
+  const handleCreate = async (productData: ProductInput) => {
     const { error } = await supabase
       .from('products')
       .insert([productData]);
@@ -106,11 +102,13 @@ export default function AdminProducts() {
     });
   };
 
-  const handleUpdate = async (id: string, updates: Partial<Product>) => {
+  const handleUpdate = async (updates: ProductInput) => {
+    if (!selectedProduct) return;
+    
     const { error } = await supabase
       .from('products')
       .update(updates)
-      .eq('id', id);
+      .eq('id', selectedProduct.id);
 
     if (error) {
       toast({
@@ -121,8 +119,11 @@ export default function AdminProducts() {
       return;
     }
 
-    setProducts(products.map(p => p.id === id ? { ...p, ...updates } : p));
+    setProducts(products.map(p => 
+      p.id === selectedProduct.id ? { ...p, ...updates } : p
+    ));
     setOpenDialog(false);
+    setSelectedProduct(null);
     
     toast({
       title: "Success",
@@ -131,7 +132,7 @@ export default function AdminProducts() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this product?")) return;
+    if (!confirmAction("Are you sure you want to delete this product?")) return;
     
     const { error } = await supabase
       .from('products')
@@ -155,8 +156,22 @@ export default function AdminProducts() {
     });
   };
 
-  const formatCurrency = (amount: number) => {
-    return `KES ${amount.toLocaleString()}`;
+  const handleFormSubmit = (productData: ProductInput) => {
+    if (selectedProduct) {
+      handleUpdate(productData);
+    } else {
+      handleCreate(productData);
+    }
+  };
+
+  const handleEditProduct = (product: Product) => {
+    setSelectedProduct(product);
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+    setSelectedProduct(null);
   };
 
   if (loading) {
@@ -183,69 +198,20 @@ export default function AdminProducts() {
           </Button>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Product</TableHead>
-                <TableHead>Category</TableHead>
-                <TableHead>Price</TableHead>
-                <TableHead>Stock</TableHead>
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {products.map((product) => (
-                <TableRow key={product.id}>
-                  <TableCell>
-                    <div className="flex items-center gap-3">
-                      {product.image_url ? (
-                        <img 
-                          src={product.image_url} 
-                          alt={product.name}
-                          className="h-12 w-12 rounded-md object-cover" 
-                        />
-                      ) : (
-                        <div className="h-12 w-12 rounded-md bg-gray-200 flex items-center justify-center">
-                          <Package className="h-6 w-6 text-gray-500" />
-                        </div>
-                      )}
-                      <div>
-                        <p className="font-medium">{product.name}</p>
-                        <p className="text-sm text-gray-500 line-clamp-1">{product.description}</p>
-                      </div>
-                    </div>
-                  </TableCell>
-                  <TableCell>{product.category}</TableCell>
-                  <TableCell>{formatCurrency(Number(product.price))}</TableCell>
-                  <TableCell>{product.stock}</TableCell>
-                  <TableCell>
-                    <div className="flex space-x-2">
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        onClick={() => {
-                          setSelectedProduct(product);
-                          setOpenDialog(true);
-                        }}
-                      >
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        onClick={() => handleDelete(product.id)}
-                        className="text-red-500 hover:text-red-600"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+          <ProductList 
+            products={products}
+            onEdit={handleEditProduct}
+            onDelete={handleDelete}
+          />
         </CardContent>
       </Card>
+
+      <ProductForm
+        open={openDialog}
+        onClose={handleCloseDialog}
+        onSubmit={handleFormSubmit}
+        product={selectedProduct}
+      />
     </div>
   );
 }
