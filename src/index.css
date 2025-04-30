@@ -1,4 +1,6 @@
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -45,49 +47,9 @@
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
-  .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
-
-    --primary: 142.1 70.6% 33.9%;
-    --primary-foreground: 0 0% 98%;
-
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 142.1 70.6% 33.9%;
-
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-}
-
-@layer base {
   * {
     @apply border-border;
+    font-family: 'Inter', sans-serif;
   }
 
   body {
@@ -98,7 +60,7 @@
 
 @layer components {
   .product-image {
-    @apply aspect-square w-full object-cover rounded-none transition-transform duration-300;
+    @apply aspect-square w-full object-cover rounded-md transition-transform duration-300;
   }
   
   .product-card:hover .product-image {
@@ -132,23 +94,44 @@
   }
   
   .stockx-card {
-    @apply border border-gray-200 hover:shadow-md transition-shadow duration-200 bg-white dark:bg-gray-800 dark:border-gray-700;
+    @apply border border-gray-200 hover:shadow-lg transition-shadow duration-300 bg-white rounded-md;
   }
   
   .stockx-product-title {
-    @apply text-sm font-medium text-black dark:text-white tracking-tight;
+    @apply text-sm font-medium text-black tracking-tight;
   }
   
   .stockx-price {
-    @apply text-stockx-green font-bold dark:text-stockx-green;
+    @apply text-stockx-green font-bold;
   }
   
   .stockx-ask {
-    @apply text-xs text-gray-500 dark:text-gray-400;
+    @apply text-xs text-gray-500;
   }
   
   .stockx-bid {
-    @apply text-xs text-gray-500 dark:text-gray-400;
+    @apply text-xs text-gray-500;
+  }
+
+  /* Additional aesthetic styles */
+  .section-title {
+    @apply text-3xl font-bold mb-6 relative;
+  }
+
+  .section-title::after {
+    content: '';
+    @apply block w-24 h-1 bg-stockx-green mt-2;
+  }
+  
+  .hover-shadow-effect {
+    @apply transition-all duration-300 hover:shadow-xl;
+  }
+  
+  .button-effect {
+    @apply transition-all duration-300 hover:scale-105 active:scale-95;
+  }
+  
+  .gradient-bg {
+    @apply bg-gradient-to-r from-blue-500 to-stockx-green;
   }
 }
-
