@@ -7,6 +7,13 @@ export const formatCurrency = (amount: number): string => {
 };
 
 /**
+ * Format currency in StockX style (green color and specific format)
+ */
+export const formatCurrencyStockX = (amount: number): string => {
+  return `KES ${amount.toLocaleString()}`;
+};
+
+/**
  * Confirm an action with a window confirm dialog
  */
 export const confirmAction = (message: string): boolean => {
