@@ -1,5 +1,5 @@
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -7,11 +7,13 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/ui/use-toast';
 import Navbar from '@/components/Navbar';
+import { Helmet } from 'react-helmet';
 
 export default function Auth() {
   const { isAuthenticated, login, register } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [isLoginMode, setIsLoginMode] = useState(true);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -53,8 +55,21 @@ export default function Auth() {
     }
   };
 
+  const fillAdminCredentials = () => {
+    const emailInput = document.getElementById('email') as HTMLInputElement;
+    const passwordInput = document.getElementById('password') as HTMLInputElement;
+    if (emailInput && passwordInput) {
+      emailInput.value = "admin@example.com";
+      passwordInput.value = "admin123";
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-white to-gray-50">
+      <Helmet>
+        <title>ShopSphere - Sign In</title>
+        <meta name="description" content="Sign in to your ShopSphere account to access your profile, orders, and more." />
+      </Helmet>
       <Navbar />
       <div className="container mx-auto max-w-md py-12 px-4 flex-1 flex items-center">
         <div className="w-full bg-white p-8 rounded-lg shadow-lg border border-gray-100 animate-fade-in">
@@ -64,7 +79,26 @@ export default function Auth() {
               <p className="text-gray-500">Enter your credentials to continue</p>
             </div>
 
-            <div className="space-y-4">
+            <div className="flex justify-center mb-4">
+              <div className="inline-flex rounded-md shadow-sm" role="group">
+                <button
+                  type="button"
+                  onClick={() => setIsLoginMode(true)}
+                  className={`px-4 py-2 text-sm font-medium rounded-l-lg ${isLoginMode ? 'bg-stockx-green text-white' : 'bg-white text-gray-700 border border-gray-300'}`}
+                >
+                  Sign In
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsLoginMode(false)}
+                  className={`px-4 py-2 text-sm font-medium rounded-r-lg ${!isLoginMode ? 'bg-stockx-green text-white' : 'bg-white text-gray-700 border border-gray-300'}`}
+                >
+                  Register
+                </button>
+              </div>
+            </div>
+
+            {isLoginMode ? (
               <form onSubmit={handleSubmit} data-action="login" className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
@@ -90,19 +124,23 @@ export default function Auth() {
                   type="submit" 
                   className="w-full bg-stockx-green hover:bg-stockx-green/90 transition-all"
                 >
-                  Log in
+                  Sign In
                 </Button>
+
+                <div className="text-center">
+                  <button 
+                    type="button"
+                    onClick={fillAdminCredentials}
+                    className="text-xs text-stockx-green hover:underline"
+                  >
+                    Use admin credentials
+                  </button>
+                  <p className="text-xs text-gray-500 mt-1">
+                    (Admin: admin@example.com / Password: admin123)
+                  </p>
+                </div>
               </form>
-
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <span className="w-full border-t" />
-                </div>
-                <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-white px-2 text-gray-500">Or</span>
-                </div>
-              </div>
-
+            ) : (
               <form onSubmit={handleSubmit} data-action="register" className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="register-email">Email</Label>
@@ -132,12 +170,12 @@ export default function Auth() {
                   Create Account
                 </Button>
               </form>
+            )}
               
-              <div className="text-center text-sm">
-                <Link to="/" className="text-stockx-green hover:underline">
-                  Return to home page
-                </Link>
-              </div>
+            <div className="text-center text-sm">
+              <Link to="/" className="text-stockx-green hover:underline">
+                Return to home page
+              </Link>
             </div>
           </div>
         </div>

@@ -66,12 +66,12 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				stockx: {
-					green: '#00ad53',
-					red: '#ff0000',
-					black: '#000000',
-					'dark-gray': '#222222',
-					'medium-gray': '#888888',
-					'light-gray': '#f5f5f5',
+					green: '#3a9561', // Softer green instead of #00ad53
+					red: '#e35c5c',  // Softer red instead of #ff0000
+					black: '#333333', // Softer black instead of #000000
+					'dark-gray': '#4a4a4a', // Softer dark gray
+					'medium-gray': '#989898', // Softer medium gray
+					'light-gray': '#f7f7f7', // Kept light gray similar
 				}
 			},
 			borderRadius: {

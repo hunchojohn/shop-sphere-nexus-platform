@@ -4,6 +4,7 @@ import ProductCard from "@/components/ProductCard";
 import { Product } from "@/lib/data";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import ProductQuickView from "@/components/ProductQuickView";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface ProductGridProps {
   products: Product[];
@@ -12,6 +13,7 @@ interface ProductGridProps {
 const ProductGrid: React.FC<ProductGridProps> = ({ products }) => {
   const [openProductId, setOpenProductId] = useState<string | null>(null);
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
+  const isMobile = useIsMobile();
 
   const handleQuickView = (e: React.MouseEvent, product: Product) => {
     e.preventDefault();
@@ -34,7 +36,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products }) => {
       </div>
 
       <Dialog open={!!openProductId} onOpenChange={() => setOpenProductId(null)}>
-        <DialogContent className="max-w-3xl">
+        <DialogContent className={isMobile ? "w-[95vw] max-w-lg p-4" : "max-w-2xl p-6"}>
           {quickViewProduct && <ProductQuickView product={quickViewProduct} />}
         </DialogContent>
       </Dialog>

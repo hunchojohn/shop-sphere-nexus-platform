@@ -22,9 +22,9 @@ const ProductQuickView: React.FC<ProductQuickViewProps> = ({ product }) => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row gap-8">
+    <div className="flex flex-col md:flex-row gap-6 max-h-[80vh] overflow-auto">
       <div className="w-full md:w-1/2">
-        <div className="aspect-square bg-gray-100 dark:bg-gray-800 rounded-md overflow-hidden">
+        <div className="aspect-square bg-gray-100 rounded-md overflow-hidden">
           <img src={selectedImage} alt={product.name} className="w-full h-full object-cover" />
         </div>
         
@@ -33,7 +33,7 @@ const ProductQuickView: React.FC<ProductQuickViewProps> = ({ product }) => {
             {selectedVariant.images.map((image, i) => (
               <div 
                 key={i} 
-                className={`aspect-square bg-gray-100 dark:bg-gray-800 rounded-sm overflow-hidden cursor-pointer border-2 ${image === selectedImage ? 'border-stockx-green' : 'border-transparent'}`}
+                className={`aspect-square bg-gray-100 rounded-sm overflow-hidden cursor-pointer border-2 ${image === selectedImage ? 'border-stockx-green' : 'border-transparent'}`}
                 onClick={() => setSelectedImage(image)}
               >
                 <img src={image} alt={`${product.name} ${i + 1}`} className="w-full h-full object-cover" />
@@ -44,7 +44,7 @@ const ProductQuickView: React.FC<ProductQuickViewProps> = ({ product }) => {
       </div>
       
       <div className="w-full md:w-1/2">
-        <h2 className="text-xl font-bold dark:text-white">{product.name}</h2>
+        <h2 className="text-xl font-bold">{product.name}</h2>
         <div className="flex items-center mt-1">
           <div className="flex">
             {[...Array(5)].map((_, i) => (
@@ -53,7 +53,7 @@ const ProductQuickView: React.FC<ProductQuickViewProps> = ({ product }) => {
                 className={`h-4 w-4 ${
                   i < Math.floor(product.rating)
                     ? "text-yellow-400"
-                    : "text-gray-300 dark:text-gray-600"
+                    : "text-gray-300"
                 }`}
                 fill="currentColor"
                 viewBox="0 0 20 20"
@@ -61,7 +61,7 @@ const ProductQuickView: React.FC<ProductQuickViewProps> = ({ product }) => {
                 <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
               </svg>
             ))}
-            <span className="ml-2 text-gray-600 dark:text-gray-400 text-sm">
+            <span className="ml-2 text-gray-600 text-sm">
               {product.rating} Rating
             </span>
           </div>
@@ -74,13 +74,13 @@ const ProductQuickView: React.FC<ProductQuickViewProps> = ({ product }) => {
         </div>
         
         <div className="mt-4">
-          <p className="text-gray-600 dark:text-gray-300 text-sm">{product.description}</p>
+          <p className="text-gray-600 text-sm">{product.description}</p>
         </div>
         
         {/* Variants Selection */}
         {product.variants.length > 1 && (
           <div className="mt-4 space-y-2">
-            <h3 className="text-sm font-medium dark:text-white">Variants</h3>
+            <h3 className="text-sm font-medium">Variants</h3>
             <div className="flex flex-wrap gap-2">
               {product.variants.map((variant, idx) => (
                 <Button
@@ -101,26 +101,28 @@ const ProductQuickView: React.FC<ProductQuickViewProps> = ({ product }) => {
         
         {/* Quantity Selection */}
         <div className="mt-4">
-          <h3 className="text-sm font-medium dark:text-white">Quantity</h3>
+          <h3 className="text-sm font-medium">Quantity</h3>
           <div className="flex items-center mt-2">
             <Button
               variant="outline"
               size="icon"
               onClick={() => setQuantity(Math.max(1, quantity - 1))}
               disabled={quantity <= 1}
+              className="border-gray-300"
             >
               -
             </Button>
-            <span className="w-10 text-center dark:text-white">{quantity}</span>
+            <span className="w-10 text-center">{quantity}</span>
             <Button
               variant="outline"
               size="icon"
               onClick={() => setQuantity(Math.min(selectedVariant.stock, quantity + 1))}
               disabled={quantity >= selectedVariant.stock}
+              className="border-gray-300"
             >
               +
             </Button>
-            <span className="ml-4 text-sm text-gray-500 dark:text-gray-400">
+            <span className="ml-4 text-sm text-gray-500">
               {selectedVariant.stock} available
             </span>
           </div>
@@ -136,7 +138,7 @@ const ProductQuickView: React.FC<ProductQuickViewProps> = ({ product }) => {
           </Button>
           
           <Link to={`/product/${product.id}`} className="flex-1">
-            <Button variant="outline" className="w-full dark:text-white dark:border-gray-700">
+            <Button variant="outline" className="w-full border-gray-300">
               View Details
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>

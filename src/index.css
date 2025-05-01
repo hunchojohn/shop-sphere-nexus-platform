@@ -16,7 +16,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 0%;
 
-    --primary: 142.1 70.6% 33.9%;
+    --primary: 140 25% 40%; /* Softer green */
     --primary-foreground: 0 0% 100%;
 
     --secondary: 0 0% 96.1%;
@@ -28,12 +28,12 @@
     --accent: 0 0% 96.1%;
     --accent-foreground: 0 0% 9%;
 
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 65% 60%; /* Softer red */
     --destructive-foreground: 0 0% 98%;
 
     --border: 0 0% 89.8%;
     --input: 0 0% 89.8%;
-    --ring: 142.1 70.6% 33.9%;
+    --ring: 140 25% 40%;
 
     --radius: 0.5rem;
 
@@ -55,6 +55,11 @@
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /* Improved SEO for headings */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-medium tracking-tight;
   }
 }
 
@@ -88,7 +93,7 @@
     transition: opacity 300ms, transform 300ms;
   }
 
-  /* StockX-inspired components */
+  /* StockX-inspired components with softer colors */
   .stockx-btn {
     @apply bg-stockx-green text-white font-semibold py-2 px-4 rounded hover:opacity-90 transition-opacity;
   }
@@ -115,7 +120,7 @@
 
   /* Additional aesthetic styles */
   .section-title {
-    @apply text-3xl font-bold mb-6 relative;
+    @apply text-3xl font-bold mb-6 relative text-stockx-black;
   }
 
   .section-title::after {
@@ -133,5 +138,15 @@
   
   .gradient-bg {
     @apply bg-gradient-to-r from-blue-500 to-stockx-green;
+  }
+
+  /* Ensure all buttons have good contrast */
+  button, .button, [type="button"], [type="submit"] {
+    @apply font-medium text-center inline-block relative overflow-hidden;
+  }
+
+  /* Better button visibility */
+  button[disabled], .button[disabled] {
+    @apply opacity-60 cursor-not-allowed;
   }
 }
