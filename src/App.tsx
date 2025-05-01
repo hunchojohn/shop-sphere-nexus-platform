@@ -26,15 +26,15 @@ const App = () => (
       <AuthProvider>
         <CartProvider>
           <Helmet>
-            <title>ShopSphere - Premium Shopping Experience</title>
-            <meta name="description" content="Shop the latest trends in fashion, electronics, and more at ShopSphere. Enjoy premium quality products with fast shipping and excellent customer service." />
-            <meta name="keywords" content="online shopping, fashion, electronics, premium products, ShopSphere" />
-            <meta property="og:title" content="ShopSphere - Premium Shopping Experience" />
-            <meta property="og:description" content="Shop the latest trends in fashion, electronics, and more at ShopSphere." />
+            <title>PapiKicks - Premium Footwear Shopping</title>
+            <meta name="description" content="Shop the latest trends in footwear at PapiKicks. Enjoy premium quality shoes with fast shipping and excellent customer service." />
+            <meta name="keywords" content="online shopping, shoes, footwear, sneakers, premium products, PapiKicks" />
+            <meta property="og:title" content="PapiKicks - Premium Footwear Shopping" />
+            <meta property="og:description" content="Shop the latest trends in footwear at PapiKicks." />
             <meta property="og:type" content="website" />
-            <meta property="og:url" content="https://shopsphere.com" />
+            <meta property="og:url" content="https://papikicks.com" />
             <meta property="og:image" content="/og-image.jpg" />
-            <link rel="canonical" href="https://shopsphere.com" />
+            <link rel="canonical" href="https://papikicks.com" />
           </Helmet>
           <TooltipProvider>
             <Toaster />

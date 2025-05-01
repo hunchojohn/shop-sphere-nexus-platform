@@ -59,23 +59,23 @@ export default function Auth() {
     const emailInput = document.getElementById('email') as HTMLInputElement;
     const passwordInput = document.getElementById('password') as HTMLInputElement;
     if (emailInput && passwordInput) {
-      emailInput.value = "admin@example.com";
-      passwordInput.value = "admin123";
+      emailInput.value = "admin@papikicks.com";
+      passwordInput.value = "papikicks123";
     }
   };
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-white to-gray-50">
       <Helmet>
-        <title>ShopSphere - Sign In</title>
-        <meta name="description" content="Sign in to your ShopSphere account to access your profile, orders, and more." />
+        <title>PapiKicks - Sign In</title>
+        <meta name="description" content="Sign in to your PapiKicks account to access your profile, orders, and more." />
       </Helmet>
       <Navbar />
       <div className="container mx-auto max-w-md py-12 px-4 flex-1 flex items-center">
         <div className="w-full bg-white p-8 rounded-lg shadow-lg border border-gray-100 animate-fade-in">
           <div className="space-y-6">
             <div className="space-y-2 text-center">
-              <h1 className="text-3xl font-bold text-stockx-green">Welcome to ShopSphere</h1>
+              <h1 className="text-3xl font-bold text-blue-600">Welcome to PapiKicks</h1>
               <p className="text-gray-500">Enter your credentials to continue</p>
             </div>
 
@@ -84,14 +84,14 @@ export default function Auth() {
                 <button
                   type="button"
                   onClick={() => setIsLoginMode(true)}
-                  className={`px-4 py-2 text-sm font-medium rounded-l-lg ${isLoginMode ? 'bg-stockx-green text-white' : 'bg-white text-gray-700 border border-gray-300'}`}
+                  className={`px-4 py-2 text-sm font-medium rounded-l-lg ${isLoginMode ? 'bg-blue-600 text-white' : 'bg-white text-gray-700 border border-gray-300'}`}
                 >
                   Sign In
                 </button>
                 <button
                   type="button"
                   onClick={() => setIsLoginMode(false)}
-                  className={`px-4 py-2 text-sm font-medium rounded-r-lg ${!isLoginMode ? 'bg-stockx-green text-white' : 'bg-white text-gray-700 border border-gray-300'}`}
+                  className={`px-4 py-2 text-sm font-medium rounded-r-lg ${!isLoginMode ? 'bg-blue-600 text-white' : 'bg-white text-gray-700 border border-gray-300'}`}
                 >
                   Register
                 </button>
@@ -107,7 +107,7 @@ export default function Auth() {
                     name="email" 
                     type="email" 
                     required 
-                    className="focus-visible:ring-stockx-green"
+                    className="focus-visible:ring-blue-600"
                   />
                 </div>
                 <div className="space-y-2">
@@ -117,12 +117,12 @@ export default function Auth() {
                     name="password" 
                     type="password" 
                     required 
-                    className="focus-visible:ring-stockx-green"
+                    className="focus-visible:ring-blue-600"
                   />
                 </div>
                 <Button 
                   type="submit" 
-                  className="w-full bg-stockx-green hover:bg-stockx-green/90 transition-all"
+                  className="w-full bg-blue-600 hover:bg-blue-700 transition-all"
                 >
                   Sign In
                 </Button>
@@ -131,12 +131,12 @@ export default function Auth() {
                   <button 
                     type="button"
                     onClick={fillAdminCredentials}
-                    className="text-xs text-stockx-green hover:underline"
+                    className="text-xs text-blue-600 hover:underline"
                   >
                     Use admin credentials
                   </button>
                   <p className="text-xs text-gray-500 mt-1">
-                    (Admin: admin@example.com / Password: admin123)
+                    (Admin: admin@papikicks.com / Password: papikicks123)
                   </p>
                 </div>
               </form>
@@ -149,7 +149,7 @@ export default function Auth() {
                     name="email" 
                     type="email" 
                     required 
-                    className="focus-visible:ring-stockx-green"
+                    className="focus-visible:ring-blue-600"
                   />
                 </div>
                 <div className="space-y-2">
@@ -159,13 +159,13 @@ export default function Auth() {
                     name="password" 
                     type="password" 
                     required 
-                    className="focus-visible:ring-stockx-green"
+                    className="focus-visible:ring-blue-600"
                   />
                 </div>
                 <Button 
                   type="submit" 
                   variant="outline" 
-                  className="w-full border-stockx-green text-stockx-green hover:bg-stockx-green hover:text-white transition-colors"
+                  className="w-full border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white transition-colors"
                 >
                   Create Account
                 </Button>
@@ -173,7 +173,7 @@ export default function Auth() {
             )}
               
             <div className="text-center text-sm">
-              <Link to="/" className="text-stockx-green hover:underline">
+              <Link to="/" className="text-blue-600 hover:underline">
                 Return to home page
               </Link>
             </div>

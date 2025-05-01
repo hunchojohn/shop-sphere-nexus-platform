@@ -28,7 +28,7 @@ const Navbar = () => {
     <header className="sticky top-0 z-40 bg-white border-b border-gray-200 shadow-sm">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         <Link to="/" className="flex items-center">
-          <h1 className="text-2xl font-bold text-blue-600">ShopSphere</h1>
+          <h1 className="text-2xl font-bold text-blue-600">PapiKicks</h1>
         </Link>
 
         <div className="hidden md:flex items-center space-x-6">

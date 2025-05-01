@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { X, Minus, Plus, ShoppingCart } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Link } from "react-router-dom";
+import { formatCurrency } from "@/utils/formatters";
 
 const CartSidebar = () => {
   const { 
@@ -114,7 +115,7 @@ const CartSidebar = () => {
                             </Button>
                           </div>
                           <p className="font-medium">
-                            ${(item.variant.price * item.quantity).toFixed(2)}
+                            {formatCurrency(item.variant.price * item.quantity)}
                           </p>
                         </div>
                       </div>
@@ -130,7 +131,7 @@ const CartSidebar = () => {
             <div className="border-t p-4 space-y-4">
               <div className="flex justify-between text-sm">
                 <span className="text-gray-500">Subtotal</span>
-                <span>${getCartTotal().toFixed(2)}</span>
+                <span>{formatCurrency(getCartTotal())}</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-gray-500">Shipping</span>
@@ -143,7 +144,7 @@ const CartSidebar = () => {
               <Separator />
               <div className="flex justify-between font-medium">
                 <span>Total</span>
-                <span>${getCartTotal().toFixed(2)}</span>
+                <span>{formatCurrency(getCartTotal())}</span>
               </div>
               <div className="space-y-2">
                 <Button className="w-full" asChild>

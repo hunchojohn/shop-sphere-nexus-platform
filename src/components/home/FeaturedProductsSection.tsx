@@ -14,7 +14,7 @@ const FeaturedProductsSection: React.FC<FeaturedProductsSectionProps> = ({ produ
     <section className="py-16 px-4 bg-gradient-to-b from-white to-gray-50">
       <div className="container mx-auto max-w-6xl animate-fade-in">
         <div className="flex justify-between items-center mb-12">
-          <h2 className="section-title">Featured Products</h2>
+          <h2 className="section-title">PapiKicks Featured</h2>
           <Link to="/products">
             <Button 
               variant="outline" 
