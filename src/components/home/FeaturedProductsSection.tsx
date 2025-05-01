@@ -18,7 +18,7 @@ const FeaturedProductsSection: React.FC<FeaturedProductsSectionProps> = ({ produ
           <Link to="/products">
             <Button 
               variant="outline" 
-              className="border-stockx-green text-stockx-green hover:bg-stockx-green hover:text-white transition-colors button-effect"
+              className="border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white transition-colors button-effect"
             >
               View All Products
             </Button>

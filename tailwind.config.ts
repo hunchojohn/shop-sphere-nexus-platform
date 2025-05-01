@@ -19,7 +19,7 @@ export default {
 		},
 		extend: {
 			fontFamily: {
-				sans: ['Inter', 'sans-serif'],
+				sans: ['Poppins', 'sans-serif'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',
@@ -65,14 +65,23 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				stockx: {
-					green: '#3a9561', // Softer green instead of #00ad53
-					red: '#e35c5c',  // Softer red instead of #ff0000
-					black: '#333333', // Softer black instead of #000000
-					'dark-gray': '#4a4a4a', // Softer dark gray
-					'medium-gray': '#989898', // Softer medium gray
-					'light-gray': '#f7f7f7', // Kept light gray similar
-				}
+				blue: {
+					50: '#eff6ff',
+					100: '#dbeafe',
+					200: '#bfdbfe',
+					300: '#93c5fd',
+					400: '#60a5fa',
+					500: '#3b82f6',
+					600: '#2563eb',
+					700: '#1d4ed8',
+					800: '#1e40af',
+					900: '#1e3a8a',
+					950: '#172554',
+				},
+				amber: {
+					400: '#fbbf24',
+					500: '#f59e0b',
+				},
 			},
 			borderRadius: {
 				lg: 'var(--radius)',

@@ -22,9 +22,9 @@ const ProductQuickView: React.FC<ProductQuickViewProps> = ({ product }) => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row gap-6 max-h-[80vh] overflow-auto">
+    <div className="flex flex-col md:flex-row gap-6 max-h-[70vh] overflow-auto">
       <div className="w-full md:w-1/2">
-        <div className="aspect-square bg-gray-100 rounded-md overflow-hidden">
+        <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
           <img src={selectedImage} alt={product.name} className="w-full h-full object-cover" />
         </div>
         
@@ -33,7 +33,7 @@ const ProductQuickView: React.FC<ProductQuickViewProps> = ({ product }) => {
             {selectedVariant.images.map((image, i) => (
               <div 
                 key={i} 
-                className={`aspect-square bg-gray-100 rounded-sm overflow-hidden cursor-pointer border-2 ${image === selectedImage ? 'border-stockx-green' : 'border-transparent'}`}
+                className={`aspect-square bg-gray-100 rounded-lg overflow-hidden cursor-pointer border-2 ${image === selectedImage ? 'border-blue-500' : 'border-transparent'}`}
                 onClick={() => setSelectedImage(image)}
               >
                 <img src={image} alt={`${product.name} ${i + 1}`} className="w-full h-full object-cover" />
@@ -44,7 +44,7 @@ const ProductQuickView: React.FC<ProductQuickViewProps> = ({ product }) => {
       </div>
       
       <div className="w-full md:w-1/2">
-        <h2 className="text-xl font-bold">{product.name}</h2>
+        <h2 className="text-xl font-medium text-gray-800">{product.name}</h2>
         <div className="flex items-center mt-1">
           <div className="flex">
             {[...Array(5)].map((_, i) => (
@@ -52,7 +52,7 @@ const ProductQuickView: React.FC<ProductQuickViewProps> = ({ product }) => {
                 key={i}
                 className={`h-4 w-4 ${
                   i < Math.floor(product.rating)
-                    ? "text-yellow-400"
+                    ? "text-amber-400"
                     : "text-gray-300"
                 }`}
                 fill="currentColor"
@@ -68,7 +68,7 @@ const ProductQuickView: React.FC<ProductQuickViewProps> = ({ product }) => {
         </div>
         
         <div className="mt-4">
-          <div className="stockx-price text-xl">
+          <div className="text-xl font-medium text-blue-600">
             {formatCurrencyStockX(selectedVariant.price)}
           </div>
         </div>
@@ -80,13 +80,14 @@ const ProductQuickView: React.FC<ProductQuickViewProps> = ({ product }) => {
         {/* Variants Selection */}
         {product.variants.length > 1 && (
           <div className="mt-4 space-y-2">
-            <h3 className="text-sm font-medium">Variants</h3>
+            <h3 className="text-sm font-medium text-gray-700">Variants</h3>
             <div className="flex flex-wrap gap-2">
               {product.variants.map((variant, idx) => (
                 <Button
                   key={idx}
                   variant={selectedVariant === variant ? "default" : "outline"}
                   size="sm"
+                  className={selectedVariant === variant ? "bg-blue-600 hover:bg-blue-700" : ""}
                   onClick={() => {
                     setSelectedVariant(variant);
                     setSelectedImage(variant.images[0]);
@@ -101,7 +102,7 @@ const ProductQuickView: React.FC<ProductQuickViewProps> = ({ product }) => {
         
         {/* Quantity Selection */}
         <div className="mt-4">
-          <h3 className="text-sm font-medium">Quantity</h3>
+          <h3 className="text-sm font-medium text-gray-700">Quantity</h3>
           <div className="flex items-center mt-2">
             <Button
               variant="outline"
@@ -130,7 +131,7 @@ const ProductQuickView: React.FC<ProductQuickViewProps> = ({ product }) => {
         
         <div className="flex flex-col sm:flex-row gap-3 mt-6">
           <Button
-            className="flex-1 bg-stockx-green hover:bg-stockx-green/90"
+            className="flex-1 bg-blue-600 hover:bg-blue-700"
             onClick={handleAddToCart}
           >
             <ShoppingCart className="mr-2 h-4 w-4" />

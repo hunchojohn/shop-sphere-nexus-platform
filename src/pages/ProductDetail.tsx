@@ -50,7 +50,7 @@ const ProductDetail = () => {
   };
 
   return (
-    <div className="container max-w-6xl mx-auto px-4 py-12">
+    <div className="container max-w-6xl mx-auto px-4 py-12 bg-white">
       <Button variant="outline" onClick={() => navigate(-1)} className="mb-8">
         <ArrowLeft className="mr-2 h-4 w-4" /> Back
       </Button>
@@ -58,7 +58,7 @@ const ProductDetail = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Product Images */}
         <div className="space-y-4">
-          <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
+          <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden shadow-md">
             <img
               src={selectedVariant.images[0]}
               alt={product.name}
@@ -68,7 +68,7 @@ const ProductDetail = () => {
           {selectedVariant.images.length > 1 && (
             <div className="grid grid-cols-4 gap-2">
               {selectedVariant.images.map((image, i) => (
-                <div key={i} className="aspect-square bg-gray-100 rounded-md overflow-hidden">
+                <div key={i} className="aspect-square bg-gray-100 rounded-md overflow-hidden shadow cursor-pointer hover:opacity-80 transition-opacity">
                   <img src={image} alt={`${product.name} ${i + 1}`} className="w-full h-full object-cover" />
                 </div>
               ))}
@@ -79,7 +79,7 @@ const ProductDetail = () => {
         {/* Product Info */}
         <div className="space-y-6">
           <div>
-            <h1 className="text-3xl font-bold">{product.name}</h1>
+            <h1 className="text-3xl font-semibold text-gray-800">{product.name}</h1>
             <div className="flex items-center mt-2">
               <div className="flex">
                 {[...Array(5)].map((_, i) => (
@@ -87,7 +87,7 @@ const ProductDetail = () => {
                     key={i}
                     className={`h-5 w-5 ${
                       i < Math.floor(product.rating)
-                        ? "text-yellow-400"
+                        ? "text-amber-400"
                         : "text-gray-300"
                     }`}
                     fill="currentColor"
@@ -103,9 +103,9 @@ const ProductDetail = () => {
             </div>
           </div>
 
-          <p className="text-2xl font-semibold">${selectedVariant.price.toFixed(2)}</p>
+          <p className="text-2xl font-medium text-blue-600">${selectedVariant.price.toFixed(2)}</p>
           
-          <Separator />
+          <Separator className="bg-gray-200" />
           
           <div className="space-y-4">
             <p className="text-gray-600">{product.description}</p>
@@ -113,7 +113,7 @@ const ProductDetail = () => {
             {/* Color Selection */}
             {colors.length > 0 && (
               <div>
-                <h3 className="text-sm font-medium mb-3">Color</h3>
+                <h3 className="text-sm font-medium mb-3 text-gray-700">Color</h3>
                 <div className="flex flex-wrap gap-2">
                   {colors.map((color) => {
                     // Find a variant with this color and the currently selected size (if any)
@@ -128,6 +128,7 @@ const ProductDetail = () => {
                         key={color}
                         variant={selectedVariant.color === color ? "default" : "outline"}
                         size="sm"
+                        className={selectedVariant.color === color ? "bg-blue-600 hover:bg-blue-700" : ""}
                         onClick={() => setSelectedVariant(variant)}
                       >
                         {color}
@@ -141,7 +142,7 @@ const ProductDetail = () => {
             {/* Size Selection */}
             {sizes.length > 0 && (
               <div>
-                <h3 className="text-sm font-medium mb-3">Size</h3>
+                <h3 className="text-sm font-medium mb-3 text-gray-700">Size</h3>
                 <div className="flex flex-wrap gap-2">
                   {sizes.map((size) => {
                     // Find a variant with this size and the currently selected color (if any)
@@ -156,6 +157,7 @@ const ProductDetail = () => {
                         key={size}
                         variant={selectedVariant.size === size ? "default" : "outline"}
                         size="sm"
+                        className={selectedVariant.size === size ? "bg-blue-600 hover:bg-blue-700" : ""}
                         onClick={() => setSelectedVariant(variant)}
                       >
                         {size}
@@ -168,7 +170,7 @@ const ProductDetail = () => {
             
             {/* Quantity Selection */}
             <div>
-              <h3 className="text-sm font-medium mb-3">Quantity</h3>
+              <h3 className="text-sm font-medium mb-3 text-gray-700">Quantity</h3>
               <div className="flex items-center">
                 <Button
                   variant="outline"
@@ -195,7 +197,7 @@ const ProductDetail = () => {
           </div>
           
           <Button
-            className="w-full mt-6"
+            className="w-full mt-6 bg-blue-600 hover:bg-blue-700"
             size="lg"
             onClick={handleAddToCart}
             disabled={selectedVariant.stock <= 0}
@@ -205,9 +207,9 @@ const ProductDetail = () => {
           </Button>
           
           {/* Product Details */}
-          <Card className="mt-6">
+          <Card className="mt-6 border border-gray-200 rounded-lg shadow-sm">
             <CardContent className="p-6">
-              <h3 className="font-semibold mb-3">Product Details</h3>
+              <h3 className="font-semibold mb-3 text-gray-800">Product Details</h3>
               <div className="space-y-2">
                 <div className="grid grid-cols-2 gap-2">
                   <span className="text-gray-500">Category</span>

@@ -28,21 +28,21 @@ const Navbar = () => {
     <header className="sticky top-0 z-40 bg-white border-b border-gray-200 shadow-sm">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         <Link to="/" className="flex items-center">
-          <h1 className="text-2xl font-bold text-stockx-green">ShopSphere</h1>
+          <h1 className="text-2xl font-bold text-blue-600">ShopSphere</h1>
         </Link>
 
-        <div className="hidden md:flex items-center space-x-4">
-          <Link to="/" className="text-gray-600 hover:text-stockx-green transition-colors font-medium">
+        <div className="hidden md:flex items-center space-x-6">
+          <Link to="/" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
             Home
           </Link>
-          <Link to="/products" className="text-gray-600 hover:text-stockx-green transition-colors font-medium">
+          <Link to="/products" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
             Products
           </Link>
-          <Link to="/products" className="text-gray-600 hover:text-stockx-green transition-colors font-medium">
+          <Link to="/products" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
             Categories
           </Link>
           {isAuthenticated && (
-            <Link to="/admin" className="text-gray-600 hover:text-stockx-green transition-colors font-medium">
+            <Link to="/admin" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
               Admin
             </Link>
           )}
@@ -55,7 +55,7 @@ const Navbar = () => {
               placeholder="Search products..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-64 bg-gray-100 border-gray-200 focus-visible:ring-stockx-green"
+              className="w-64 bg-gray-100 border-gray-200 focus-visible:ring-blue-600"
             />
             <Button
               type="submit"
@@ -70,7 +70,7 @@ const Navbar = () => {
           {isAuthenticated ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="text-gray-600">
+                <Button variant="ghost" size="icon" className="text-gray-700">
                   <User className="h-5 w-5" />
                 </Button>
               </DropdownMenuTrigger>
@@ -93,7 +93,7 @@ const Navbar = () => {
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <Button variant="ghost" onClick={() => navigate('/auth')} className="text-gray-600">
+            <Button variant="ghost" onClick={() => navigate('/auth')} className="text-gray-700">
               Log In
             </Button>
           )}
@@ -102,11 +102,11 @@ const Navbar = () => {
             variant="ghost"
             size="icon"
             onClick={openCart}
-            className="relative text-gray-600"
+            className="relative text-gray-700"
           >
             <ShoppingCart className="h-5 w-5" />
             {getCartCount() > 0 && (
-              <span className="absolute -top-1 -right-1 bg-stockx-green text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+              <span className="absolute -top-1 -right-1 bg-blue-600 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
                 {getCartCount()}
               </span>
             )}

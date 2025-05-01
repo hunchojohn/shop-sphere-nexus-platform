@@ -28,8 +28,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }) => {
 
   return (
     <Link to={`/product/${product.id}`} className="block">
-      <Card className="stockx-card overflow-hidden border-0 rounded-none product-card h-full relative group">
-        <div className="overflow-hidden bg-[#f7f7f7] dark:bg-gray-800">
+      <Card className="overflow-hidden border rounded-lg product-card h-full relative group transition-all duration-300 hover:shadow-lg">
+        <div className="overflow-hidden bg-gray-100">
           <img 
             src={primaryImage} 
             alt={product.name} 
@@ -40,7 +40,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }) => {
               <Button 
                 variant="secondary" 
                 size="sm" 
-                className="bg-black/70 hover:bg-black text-white"
+                className="bg-white/80 hover:bg-white text-gray-800 shadow-md"
                 onClick={onQuickView}
               >
                 <Eye className="h-3 w-3 mr-2" /> Quick View
@@ -48,20 +48,20 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }) => {
             </div>
           )}
         </div>
-        <div className="p-3 dark:bg-gray-900">
+        <div className="p-4">
           <div className="mb-1">
-            <h3 className="stockx-product-title line-clamp-1 dark:text-gray-100">{product.name}</h3>
+            <h3 className="text-sm font-medium line-clamp-1 text-gray-800">{product.name}</h3>
           </div>
           <div className="flex flex-col">
-            <div className="stockx-price">
+            <div className="text-blue-600 font-medium">
               {formatCurrencyStockX(primaryVariant.price)}
             </div>
-            <div className="stockx-ask mt-1">
+            <div className="text-xs text-gray-500 mt-1">
               Last Sale: {formatCurrencyStockX(primaryVariant.price * 0.95)}
             </div>
           </div>
           <Button 
-            className="w-full mt-3 bg-stockx-green hover:bg-stockx-green/90"
+            className="w-full mt-3 bg-blue-600 hover:bg-blue-700"
             size="sm"
             onClick={handleAddToCart}
           >
