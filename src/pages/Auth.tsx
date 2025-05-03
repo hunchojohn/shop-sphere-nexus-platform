@@ -1,11 +1,10 @@
-
 import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
 import Navbar from '@/components/Navbar';
 import { Helmet } from 'react-helmet';
 
@@ -43,6 +42,7 @@ export default function Auth() {
 
       if (success) {
         toast({
+          variant: "success",
           title: isLogin ? "Welcome back!" : "Account created",
           description: isLogin ? "You've been logged in successfully." : "Your account has been created successfully.",
         });
@@ -72,8 +72,8 @@ export default function Auth() {
     const emailInput = document.getElementById('email') as HTMLInputElement;
     const passwordInput = document.getElementById('password') as HTMLInputElement;
     if (emailInput && passwordInput) {
-      emailInput.value = "admin@papikicks.com";
-      passwordInput.value = "papikicks123";
+      emailInput.value = "admin@example.com"; // Update with admin email
+      passwordInput.value = "admin123"; // Update with admin password
     }
   };
 
@@ -156,7 +156,7 @@ export default function Auth() {
                     Use admin credentials
                   </button>
                   <p className="text-xs text-gray-500 mt-1">
-                    (Admin: admin@papikicks.com / Password: papikicks123)
+                    (Admin: admin@example.com / Password: admin123)
                   </p>
                 </div>
               </form>
