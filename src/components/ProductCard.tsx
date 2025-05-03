@@ -27,46 +27,46 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }) => {
   };
 
   return (
-    <Link to={`/product/${product.id}`} className="block">
-      <Card className="overflow-hidden border rounded-lg product-card h-full relative group transition-all duration-300 hover:shadow-lg">
-        <div className="overflow-hidden bg-gray-100">
+    <Link to={`/product/${product.id}`} className="block h-full">
+      <Card className="overflow-hidden rounded-xl border-2 border-gray-100 h-full flex flex-col transition-all duration-300 hover:border-blue-200 hover:shadow-lg">
+        <div className="overflow-hidden aspect-square bg-gray-50 relative">
           <img 
             src={primaryImage} 
             alt={product.name} 
-            className="product-image"
+            className="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-110"
           />
           {onQuickView && (
-            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/5 hover:bg-black/10">
               <Button 
                 variant="secondary" 
                 size="sm" 
-                className="bg-white/80 hover:bg-white text-gray-800 shadow-md"
+                className="bg-white/90 hover:bg-white text-gray-800 shadow-md"
                 onClick={onQuickView}
               >
-                <Eye className="h-3 w-3 mr-2" /> Quick View
+                <Eye className="h-4 w-4 mr-1" /> Quick View
               </Button>
             </div>
           )}
         </div>
-        <div className="p-4">
-          <div className="mb-1">
-            <h3 className="text-sm font-medium line-clamp-1 text-gray-800">{product.name}</h3>
+        <div className="p-4 flex-grow flex flex-col justify-between">
+          <div>
+            <h3 className="text-sm font-medium line-clamp-2 text-gray-800 mb-1">{product.name}</h3>
+            <div className="text-xs text-gray-500 mb-2">
+              {primaryVariant.color} · {primaryVariant.size}
+            </div>
           </div>
-          <div className="flex flex-col">
-            <div className="text-blue-600 font-medium">
+          <div className="mt-auto">
+            <div className="text-blue-600 font-semibold mb-2">
               {formatCurrencyStockX(primaryVariant.price)}
             </div>
-            <div className="text-xs text-gray-500 mt-1">
-              Last Sale: {formatCurrencyStockX(primaryVariant.price * 0.95)}
-            </div>
+            <Button 
+              className="w-full"
+              size="sm"
+              onClick={handleAddToCart}
+            >
+              <ShoppingCart className="h-4 w-4 mr-1" /> Add to Cart
+            </Button>
           </div>
-          <Button 
-            className="w-full mt-3 bg-blue-600 hover:bg-blue-700"
-            size="sm"
-            onClick={handleAddToCart}
-          >
-            <ShoppingCart className="h-3 w-3 mr-2" /> Add to Cart
-          </Button>
         </div>
       </Card>
     </Link>

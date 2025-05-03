@@ -14,16 +14,16 @@ const buttonVariants = cva(
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-sm",
         outline:
-          "border-2 border-blue-600 bg-transparent text-blue-600 hover:bg-blue-50",
+          "border-2 border-blue-600 bg-white text-blue-600 hover:bg-blue-50",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-sm",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
+          "bg-gray-200 text-gray-800 hover:bg-gray-300 shadow-sm",
+        ghost: "text-gray-700 hover:bg-accent hover:text-accent-foreground",
         link: "text-blue-600 underline-offset-4 hover:underline",
         success: "bg-emerald-600 text-white hover:bg-emerald-700 shadow-sm",
         warning: "bg-amber-500 text-white hover:bg-amber-600 shadow-sm",
-        mpesa: "bg-[#4CAF50] text-white hover:bg-[#3e8e41] shadow-sm",
-        credit: "bg-[#0066b2] text-white hover:bg-[#004d86] shadow-sm",
-        cod: "bg-slate-700 text-white hover:bg-slate-800 shadow-sm",
+        mpesa: "bg-[#4CAF50] text-white hover:bg-[#3e8e41] shadow-md border border-[#3e8e41]/20",
+        credit: "bg-[#0066b2] text-white hover:bg-[#004d86] shadow-md border border-[#004d86]/20",
+        cod: "bg-slate-700 text-white hover:bg-slate-800 shadow-md border border-slate-800/20",
       },
       size: {
         default: "h-10 px-4 py-2",

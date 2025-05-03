@@ -348,7 +348,7 @@ export default function Checkout() {
                   <div className="flex items-center">
                     <div className="w-16 h-16 rounded-md overflow-hidden border border-gray-200 mr-3">
                       <img 
-                        src={item.product.images[0]} 
+                        src={item.variant.images[0]} 
                         alt={item.product.name} 
                         className="w-full h-full object-cover"
                       />

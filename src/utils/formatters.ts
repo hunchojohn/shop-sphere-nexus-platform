@@ -7,7 +7,7 @@ export const formatCurrency = (amount: number): string => {
 };
 
 /**
- * Format currency in StockX style (green color for positive values)
+ * Format currency in StockX style (with KSH prefix)
  */
 export const formatCurrencyStockX = (amount: number): string => {
   return `KSH ${amount.toLocaleString()}`;
