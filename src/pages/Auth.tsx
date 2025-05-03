@@ -34,6 +34,9 @@ export default function Auth() {
     const isLogin = (event.currentTarget.dataset.action === 'login');
 
     try {
+      // Log the login attempt details for debugging
+      console.log(`Attempting to ${isLogin ? 'login' : 'register'} with email: ${email}`);
+      
       const success = isLogin 
         ? await login(email, password)
         : await register(formData.get('name') as string || '', email, password);

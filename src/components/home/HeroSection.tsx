@@ -19,12 +19,12 @@ const HeroSection = () => {
             </p>
             <div className="flex flex-wrap gap-4">
               <Link to="/products">
-                <Button size="lg" className="bg-white text-stockx-green hover:bg-blue-50 hover:scale-105 transition-all">
+                <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50 hover:scale-105 transition-all border border-white/50 shadow-md">
                   Shop Now
                 </Button>
               </Link>
               <Link to="/products">
-                <Button size="lg" variant="outline" className="text-white border-white hover:bg-white/10 hover:scale-105 transition-all">
+                <Button size="lg" variant="outline" className="bg-blue-600/20 text-white border-white hover:bg-white/20 hover:scale-105 transition-all shadow-md">
                   Browse Categories
                 </Button>
               </Link>
