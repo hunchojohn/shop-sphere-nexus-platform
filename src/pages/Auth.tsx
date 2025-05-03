@@ -14,6 +14,7 @@ export default function Auth() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isLoginMode, setIsLoginMode] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -23,6 +24,7 @@ export default function Auth() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setIsLoading(true);
     const formData = new FormData(event.currentTarget);
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
@@ -31,7 +33,7 @@ export default function Auth() {
     try {
       const success = isLogin 
         ? await login(email, password)
-        : await register('', email, password);
+        : await register(formData.get('name') as string || '', email, password);
 
       if (success) {
         toast({
@@ -52,6 +54,8 @@ export default function Auth() {
         title: "Error",
         description: "An unexpected error occurred",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -122,9 +126,10 @@ export default function Auth() {
                 </div>
                 <Button 
                   type="submit" 
-                  className="w-full bg-blue-600 hover:bg-blue-700 transition-all"
+                  className="w-full"
+                  disabled={isLoading}
                 >
-                  Sign In
+                  {isLoading ? "Signing in..." : "Sign In"}
                 </Button>
 
                 <div className="text-center">
@@ -142,6 +147,16 @@ export default function Auth() {
               </form>
             ) : (
               <form onSubmit={handleSubmit} data-action="register" className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="register-name">Full Name</Label>
+                  <Input 
+                    id="register-name" 
+                    name="name" 
+                    type="text" 
+                    required 
+                    className="focus-visible:ring-blue-600"
+                  />
+                </div>
                 <div className="space-y-2">
                   <Label htmlFor="register-email">Email</Label>
                   <Input 
@@ -165,9 +180,10 @@ export default function Auth() {
                 <Button 
                   type="submit" 
                   variant="outline" 
-                  className="w-full border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white transition-colors"
+                  className="w-full"
+                  disabled={isLoading}
                 >
-                  Create Account
+                  {isLoading ? "Creating Account..." : "Create Account"}
                 </Button>
               </form>
             )}

@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, User, Search } from "lucide-react";
+import { ShoppingCart, User, Search, ShoppingBag } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -21,7 +21,9 @@ const Navbar = () => {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(`Searching for: ${searchTerm}`);
+    if (searchTerm.trim()) {
+      navigate(`/products?search=${encodeURIComponent(searchTerm)}`);
+    }
   };
 
   return (
@@ -95,6 +97,18 @@ const Navbar = () => {
           ) : (
             <Button variant="ghost" onClick={() => navigate('/auth')} className="text-gray-700">
               Log In
+            </Button>
+          )}
+
+          {isAuthenticated && getCartCount() > 0 && (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => navigate('/checkout')}
+              className="relative text-gray-700"
+              title="Go to checkout"
+            >
+              <ShoppingBag className="h-5 w-5" />
             </Button>
           )}
 
