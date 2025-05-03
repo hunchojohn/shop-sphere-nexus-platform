@@ -71,14 +71,12 @@ const Navbar = () => {
           <NavigationMenu className="hidden md:flex mx-4 flex-1 justify-center">
             <NavigationMenuList>
               <NavigationMenuItem>
-                <Link to="/" legacyBehavior passHref>
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    Home
-                  </NavigationMenuLink>
+                <Link to="/" className={cn(navigationMenuTriggerStyle(), "text-gray-800 hover:text-blue-600")}>
+                  Home
                 </Link>
               </NavigationMenuItem>
               <NavigationMenuItem>
-                <NavigationMenuTrigger>Categories</NavigationMenuTrigger>
+                <NavigationMenuTrigger className="text-gray-800 hover:text-blue-600">Categories</NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
                     {categories.map((category) => (
@@ -95,18 +93,14 @@ const Navbar = () => {
                 </NavigationMenuContent>
               </NavigationMenuItem>
               <NavigationMenuItem>
-                <Link to="/products" legacyBehavior passHref>
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    Products
-                  </NavigationMenuLink>
+                <Link to="/products" className={cn(navigationMenuTriggerStyle(), "text-gray-800 hover:text-blue-600")}>
+                  Products
                 </Link>
               </NavigationMenuItem>
               {isAuthenticated && (
                 <NavigationMenuItem>
-                  <Link to="/admin" legacyBehavior passHref>
-                    <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                      Admin
-                    </NavigationMenuLink>
+                  <Link to="/admin" className={cn(navigationMenuTriggerStyle(), "text-gray-800 hover:text-blue-600")}>
+                    Admin
                   </Link>
                 </NavigationMenuItem>
               )}

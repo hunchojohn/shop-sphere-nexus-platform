@@ -15,6 +15,7 @@ export default function Auth() {
   const { toast } = useToast();
   const [isLoginMode, setIsLoginMode] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [loginError, setLoginError] = useState('');
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -25,6 +26,8 @@ export default function Auth() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsLoading(true);
+    setLoginError('');
+    
     const formData = new FormData(event.currentTarget);
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
@@ -42,6 +45,7 @@ export default function Auth() {
         });
         navigate('/');
       } else {
+        setLoginError(isLogin ? "Invalid email or password" : "Could not create account");
         toast({
           variant: "destructive",
           title: "Error",
@@ -49,6 +53,8 @@ export default function Auth() {
         });
       }
     } catch (error) {
+      console.error("Auth error:", error);
+      setLoginError("An unexpected error occurred");
       toast({
         variant: "destructive",
         title: "Error",
@@ -101,6 +107,12 @@ export default function Auth() {
                 </button>
               </div>
             </div>
+
+            {loginError && (
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md text-sm">
+                {loginError}
+              </div>
+            )}
 
             {isLoginMode ? (
               <form onSubmit={handleSubmit} data-action="login" className="space-y-4">
@@ -179,7 +191,6 @@ export default function Auth() {
                 </div>
                 <Button 
                   type="submit" 
-                  variant="outline" 
                   className="w-full"
                   disabled={isLoading}
                 >
