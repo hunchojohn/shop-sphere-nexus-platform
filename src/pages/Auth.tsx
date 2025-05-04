@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
@@ -7,6 +8,8 @@ import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import Navbar from '@/components/Navbar';
 import { Helmet } from 'react-helmet';
+import { AlertCircle } from 'lucide-react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 export default function Auth() {
   const { isAuthenticated, login, register } = useAuth();
@@ -72,8 +75,8 @@ export default function Auth() {
     const emailInput = document.getElementById('email') as HTMLInputElement;
     const passwordInput = document.getElementById('password') as HTMLInputElement;
     if (emailInput && passwordInput) {
-      emailInput.value = "admin@example.com"; // Update with admin email
-      passwordInput.value = "admin123"; // Update with admin password
+      emailInput.value = "admin@example.com";
+      passwordInput.value = "admin123";
     }
   };
 
@@ -112,9 +115,10 @@ export default function Auth() {
             </div>
 
             {loginError && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md text-sm">
-                {loginError}
-              </div>
+              <Alert variant="destructive" className="text-sm">
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription>{loginError}</AlertDescription>
+              </Alert>
             )}
 
             {isLoginMode ? (

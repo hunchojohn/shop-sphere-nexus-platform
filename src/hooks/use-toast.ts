@@ -164,7 +164,7 @@ function toast({ ...props }: Toast) {
   })
 
   // Auto-dismiss toasts with timeout based on variant
-  const autoHideDelay = props.variant === "destructive" ? 8000 : 5000;  // longer for error messages
+  const autoHideDelay = props.variant === "destructive" ? 8000 : 3000;  // shorter for regular messages
   setTimeout(() => {
     dispatch({ type: actionTypes.DISMISS_TOAST, toastId: id })
   }, autoHideDelay);

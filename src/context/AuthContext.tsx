@@ -22,7 +22,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const isAuthenticated = !!user;
 
   useEffect(() => {
-    // Set up auth state listener
+    // Set up auth state listener first
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
         console.log("Auth state changed:", event, session?.user?.email);
@@ -31,7 +31,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     );
 
-    // Check for existing session
+    // Then check for existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
       console.log("Initial session check:", session?.user?.email);
       setSession(session);
@@ -56,7 +56,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
       
       console.log("Login successful:", data.user?.email);
-      return !!data.user;
+      return true;
     } catch (error) {
       console.error("Login exception:", error);
       return false;
@@ -65,7 +65,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const register = async (name: string, email: string, password: string): Promise<boolean> => {
     try {
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -74,7 +74,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           }
         }
       });
-      return !error;
+      
+      if (error) {
+        console.error("Registration error:", error.message);
+        return false;
+      }
+      
+      console.log("Registration successful:", data.user?.email);
+      return !!data.user;
     } catch (error) {
       console.error("Registration error:", error);
       return false;
