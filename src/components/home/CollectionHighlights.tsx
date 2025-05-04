@@ -22,7 +22,7 @@ const CollectionHighlights = () => {
               <h3 className="text-xl font-bold mb-2 dark:text-white">New Arrivals</h3>
               <p className="text-gray-600 dark:text-gray-300 mb-4">Check out the latest additions to our catalog.</p>
               <Link to="/products">
-                <Button variant="default" className="w-full bg-blue-600 hover:bg-blue-700 text-white shadow-md">Explore</Button>
+                <Button variant="default" className="w-full bg-blue-600 hover:bg-blue-700 text-white border border-blue-700 shadow-md">Explore</Button>
               </Link>
             </div>
           </div>
@@ -39,7 +39,7 @@ const CollectionHighlights = () => {
               <h3 className="text-xl font-bold mb-2 dark:text-white">Best Sellers</h3>
               <p className="text-gray-600 dark:text-gray-300 mb-4">Our most popular products that customers love.</p>
               <Link to="/products">
-                <Button variant="default" className="w-full bg-blue-600 hover:bg-blue-700 text-white shadow-md">Shop Now</Button>
+                <Button variant="default" className="w-full bg-blue-600 hover:bg-blue-700 text-white border border-blue-700 shadow-md">Shop Now</Button>
               </Link>
             </div>
           </div>
@@ -56,7 +56,7 @@ const CollectionHighlights = () => {
               <h3 className="text-xl font-bold mb-2 dark:text-white">Limited Editions</h3>
               <p className="text-gray-600 dark:text-gray-300 mb-4">Exclusive items available for a limited time only.</p>
               <Link to="/products">
-                <Button variant="default" className="w-full bg-blue-600 hover:bg-blue-700 text-white shadow-md">View Collection</Button>
+                <Button variant="default" className="w-full bg-blue-600 hover:bg-blue-700 text-white border border-blue-700 shadow-md">View Collection</Button>
               </Link>
             </div>
           </div>
