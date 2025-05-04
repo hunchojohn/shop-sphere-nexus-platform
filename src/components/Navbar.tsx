@@ -41,6 +41,9 @@ const Navbar = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  // Check if the user is an admin based on email
+  const isAdmin = user?.email === 'admin@example.com';
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchTerm.trim()) {
@@ -63,7 +66,7 @@ const Navbar = () => {
               <Menu className="h-5 w-5" />
             </Button>
             <Link to="/" className="flex items-center">
-              <h1 className="text-2xl font-bold text-blue-600">PapiKicks</h1>
+              <h1 className="text-2xl font-bold text-purple-600">PapiKicks</h1>
             </Link>
           </div>
 
@@ -71,12 +74,12 @@ const Navbar = () => {
           <NavigationMenu className="hidden md:flex mx-4 flex-1 justify-center">
             <NavigationMenuList>
               <NavigationMenuItem>
-                <Link to="/" className={cn(navigationMenuTriggerStyle(), "text-gray-800 hover:text-blue-600")}>
+                <Link to="/" className={cn(navigationMenuTriggerStyle(), "text-gray-800 hover:text-purple-600")}>
                   Home
                 </Link>
               </NavigationMenuItem>
               <NavigationMenuItem>
-                <NavigationMenuTrigger className="text-gray-800 hover:text-blue-600">Categories</NavigationMenuTrigger>
+                <NavigationMenuTrigger className="text-gray-800 hover:text-purple-600">Categories</NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
                     {categories.map((category) => (
@@ -93,13 +96,13 @@ const Navbar = () => {
                 </NavigationMenuContent>
               </NavigationMenuItem>
               <NavigationMenuItem>
-                <Link to="/products" className={cn(navigationMenuTriggerStyle(), "text-gray-800 hover:text-blue-600")}>
+                <Link to="/products" className={cn(navigationMenuTriggerStyle(), "text-gray-800 hover:text-purple-600")}>
                   Products
                 </Link>
               </NavigationMenuItem>
-              {isAuthenticated && (
+              {isAuthenticated && isAdmin && (
                 <NavigationMenuItem>
-                  <Link to="/admin" className={cn(navigationMenuTriggerStyle(), "text-gray-800 hover:text-blue-600")}>
+                  <Link to="/admin" className={cn(navigationMenuTriggerStyle(), "text-gray-800 hover:text-purple-600")}>
                     Admin
                   </Link>
                 </NavigationMenuItem>
@@ -115,7 +118,7 @@ const Navbar = () => {
                 placeholder="Search products..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pr-10 w-full bg-gray-100 border-gray-200 focus-visible:ring-blue-600"
+                className="pr-10 w-full bg-gray-100 border-gray-200 focus-visible:ring-purple-600"
               />
               <Button
                 type="submit"
@@ -148,6 +151,11 @@ const Navbar = () => {
                   <DropdownMenuItem className="text-gray-600">
                     <Link to="/orders" className="w-full">My Orders</Link>
                   </DropdownMenuItem>
+                  {isAdmin && (
+                    <DropdownMenuItem className="text-gray-600">
+                      <Link to="/admin" className="w-full">Admin Dashboard</Link>
+                    </DropdownMenuItem>
+                  )}
                   <DropdownMenuItem onClick={() => {
                     logout();
                     navigate('/auth');
@@ -157,7 +165,7 @@ const Navbar = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <Button variant="ghost" onClick={() => navigate('/auth')} className="text-gray-700">
+              <Button variant="ghost" onClick={() => navigate('/auth')} className="text-gray-700 hover:text-purple-600">
                 Log In
               </Button>
             )}
@@ -167,7 +175,7 @@ const Navbar = () => {
                 variant="ghost"
                 size="icon"
                 onClick={() => navigate('/checkout')}
-                className="relative text-gray-700"
+                className="relative text-gray-700 hover:text-purple-600"
                 title="Go to checkout"
               >
                 <ShoppingBag className="h-5 w-5" />
@@ -178,11 +186,11 @@ const Navbar = () => {
               variant="ghost"
               size="icon"
               onClick={openCart}
-              className="relative text-gray-700"
+              className="relative text-gray-700 hover:text-purple-600"
             >
               <ShoppingCart className="h-5 w-5" />
               {getCartCount() > 0 && (
-                <span className="absolute -top-1 -right-1 bg-blue-600 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+                <span className="absolute -top-1 -right-1 bg-purple-600 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
                   {getCartCount()}
                 </span>
               )}
@@ -198,7 +206,7 @@ const Navbar = () => {
               placeholder="Search products..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pr-10 w-full bg-gray-100 border-gray-200 focus-visible:ring-blue-600"
+              className="pr-10 w-full bg-gray-100 border-gray-200 focus-visible:ring-purple-600"
             />
             <Button
               type="submit"
@@ -226,7 +234,7 @@ const Navbar = () => {
                   {category.name}
                 </Link>
               ))}
-              {isAuthenticated && (
+              {isAuthenticated && isAdmin && (
                 <Link to="/admin" className="px-2 py-1 hover:bg-gray-100 rounded-md">Admin</Link>
               )}
             </nav>
