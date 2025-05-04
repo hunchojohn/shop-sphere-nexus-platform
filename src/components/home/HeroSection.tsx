@@ -5,37 +5,39 @@ import { Button } from "@/components/ui/button";
 
 const HeroSection = () => {
   return (
-    <section className="bg-gradient-to-r from-blue-500 to-stockx-green text-white py-24 px-4 relative overflow-hidden">
-      <div className="absolute inset-0 bg-[url('/placeholder.svg')] bg-repeat-space opacity-10"></div>
+    <section className="relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-r from-blue-600/90 to-blue-800/90 z-0"></div>
+      <div className="absolute inset-0 bg-[url('/images/hero-pattern.png')] bg-repeat opacity-10 z-0"></div>
       
-      <div className="container mx-auto max-w-6xl relative z-10">
+      <div className="container mx-auto max-w-6xl px-4 py-16 md:py-24 relative z-10">
         <div className="flex flex-col md:flex-row items-center">
-          <div className="md:w-1/2 mb-12 md:mb-0 animate-slide-up">
-            <h1 className="text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-              Find Your <span className="text-yellow-300">Perfect</span> Style
+          <div className="md:w-1/2 mb-12 md:mb-0 animate-fade-in">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight text-white">
+              Premium <span className="text-yellow-300">Footwear</span> Collection
             </h1>
-            <p className="text-lg mb-8 text-blue-100 max-w-md">
-              Shop the latest trends with confidence. Authentic products, competitive prices, and lightning-fast delivery. Join thousands of satisfied customers today.
+            <p className="text-base md:text-lg mb-8 text-blue-100 max-w-md">
+              Discover the latest trends in authentic designer shoes. Quality materials, competitive prices, and fast delivery.
             </p>
             <div className="flex flex-wrap gap-4">
               <Link to="/products">
-                <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50 hover:scale-105 transition-all border border-white/50 shadow-md">
+                <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50 hover:scale-105 transition-all shadow-md">
                   Shop Now
                 </Button>
               </Link>
               <Link to="/products">
-                <Button size="lg" variant="outline" className="bg-blue-600/20 text-white border-white hover:bg-white/20 hover:scale-105 transition-all shadow-md">
+                <Button size="lg" variant="outline" className="border-2 bg-transparent text-white border-white hover:bg-white/20 hover:scale-105 transition-all">
                   Browse Categories
                 </Button>
               </Link>
             </div>
           </div>
           <div className="md:w-1/2 flex justify-center animate-fade-in">
-            <div className="bg-white/10 backdrop-blur-sm p-6 rounded-lg shadow-2xl transform hover:rotate-0 transition-transform duration-500 border border-white/20 hover:shadow-blue-500/20">
+            <div className="relative">
+              <div className="absolute inset-0 bg-blue-400/20 rounded-full blur-3xl"></div>
               <img 
-                src="/placeholder.svg" 
-                alt="Featured Products" 
-                className="w-full h-auto rounded shadow-xl"
+                src="/images/hero-shoes.png" 
+                alt="Premium Footwear Collection" 
+                className="relative z-10 max-h-[400px] w-auto drop-shadow-2xl"
               />
             </div>
           </div>

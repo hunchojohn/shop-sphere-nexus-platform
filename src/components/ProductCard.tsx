@@ -7,6 +7,7 @@ import { ShoppingCart, Eye } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { Product } from "@/lib/data";
 import { formatCurrencyStockX } from "@/utils/formatters";
+import { useToast } from "@/hooks/use-toast";
 
 interface ProductCardProps {
   product: Product;
@@ -15,6 +16,7 @@ interface ProductCardProps {
 
 const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }) => {
   const { addItem } = useCart();
+  const { toast } = useToast();
   
   // Just use the first variant for the card display
   const primaryVariant = product.variants[0];
@@ -24,23 +26,32 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }) => {
     e.preventDefault();
     e.stopPropagation();
     addItem(product, primaryVariant, 1);
+    
+    // Show toast notification
+    toast({
+      title: "Added to cart",
+      description: `${product.name} has been added to your cart.`,
+      variant: "success",
+    });
   };
 
   return (
     <Link to={`/product/${product.id}`} className="block h-full">
-      <Card className="overflow-hidden rounded-xl border-2 border-gray-100 h-full flex flex-col transition-all duration-300 hover:border-blue-200 hover:shadow-lg">
-        <div className="overflow-hidden aspect-square bg-gray-50 relative">
-          <img 
-            src={primaryImage} 
-            alt={product.name} 
-            className="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-110"
-          />
+      <Card className="overflow-hidden rounded-lg border border-gray-200 h-full flex flex-col transition-all duration-300 hover:shadow-md hover:border-blue-200">
+        <div className="relative group overflow-hidden">
+          <div className="aspect-square bg-gray-100">
+            <img 
+              src={primaryImage} 
+              alt={product.name} 
+              className="w-full h-full object-contain object-center"
+            />
+          </div>
           {onQuickView && (
-            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/5 hover:bg-black/10">
+            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/5">
               <Button 
                 variant="secondary" 
                 size="sm" 
-                className="bg-white/90 hover:bg-white text-gray-800 shadow-md"
+                className="bg-white/90 hover:bg-white text-gray-800 shadow-sm"
                 onClick={onQuickView}
               >
                 <Eye className="h-4 w-4 mr-1" /> Quick View

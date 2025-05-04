@@ -10,6 +10,7 @@ import CategoryProductsSection from "@/components/home/CategoryProductsSection";
 import CollectionHighlights from "@/components/home/CollectionHighlights";
 import NewsletterSection from "@/components/home/NewsletterSection";
 import Footer from "@/components/home/Footer";
+import { Helmet } from "react-helmet";
 
 const Index = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -44,30 +45,39 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900">
-      <Navbar />
-      <CartSidebar />
+    <>
+      <Helmet>
+        <title>PapiKicks - Premium Footwear Shopping</title>
+        <meta name="description" content="Shop the latest trends in footwear at PapiKicks. Authentic products, competitive prices, and fast delivery." />
+      </Helmet>
       
-      <HeroSection />
-      
-      <FeaturedProductsSection products={featuredProducts} />
-      
-      <Separator className="container mx-auto max-w-6xl" />
-      
-      <CategoryProductsSection 
-        categories={categories}
-        selectedCategory={selectedCategory}
-        displayedProducts={displayedProducts}
-        onCategorySelect={handleCategorySelect}
-        onSearch={handleSearch}
-      />
-      
-      <CollectionHighlights />
-      
-      <NewsletterSection />
-      
-      <Footer />
-    </div>
+      <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900">
+        <Navbar />
+        <CartSidebar />
+        
+        <main>
+          <HeroSection />
+          
+          <FeaturedProductsSection products={featuredProducts} />
+          
+          <Separator className="container mx-auto max-w-6xl my-4" />
+          
+          <CollectionHighlights />
+          
+          <CategoryProductsSection 
+            categories={categories}
+            selectedCategory={selectedCategory}
+            displayedProducts={displayedProducts}
+            onCategorySelect={handleCategorySelect}
+            onSearch={handleSearch}
+          />
+          
+          <NewsletterSection />
+        </main>
+        
+        <Footer />
+      </div>
+    </>
   );
 };
 

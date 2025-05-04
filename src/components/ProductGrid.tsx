@@ -24,15 +24,13 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products }) => {
 
   return (
     <>
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
         {products.map(product => (
-          <div key={product.id} className="h-full flex flex-col">
-            <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 h-full border border-gray-100">
-              <ProductCard 
-                product={product}
-                onQuickView={(e) => handleQuickView(e, product)} 
-              />
-            </div>
+          <div key={product.id} className="h-full">
+            <ProductCard 
+              product={product}
+              onQuickView={(e) => handleQuickView(e, product)} 
+            />
           </div>
         ))}
       </div>
