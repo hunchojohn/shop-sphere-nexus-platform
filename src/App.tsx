@@ -31,6 +31,7 @@ const App = () => (
             <title>PapiKicks - Premium Footwear Shopping</title>
             <meta name="description" content="Shop the latest trends in footwear at PapiKicks. Enjoy premium quality shoes with fast shipping and excellent customer service." />
             <meta name="keywords" content="online shopping, shoes, footwear, sneakers, premium products, PapiKicks" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             <meta property="og:title" content="PapiKicks - Premium Footwear Shopping" />
             <meta property="og:description" content="Shop the latest trends in footwear at PapiKicks." />
             <meta property="og:type" content="website" />
