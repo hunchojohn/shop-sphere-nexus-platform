@@ -67,19 +67,23 @@ const HeroSection = () => {
   return (
     <section 
       ref={heroRef} 
-      className="relative overflow-hidden bg-gradient-to-br from-blue-50 via-white to-blue-50 py-20 md:py-28"
+      className="relative overflow-hidden bg-gradient-to-br from-blue-100 via-blue-50 to-indigo-100 py-20 md:py-28"
     >
       {/* Modern dot pattern background */}
-      <div className="absolute inset-0 bg-[radial-gradient(#e0e7ff_1px,transparent_1px)] bg-[size:20px_20px] opacity-50"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(#3b82f6_1px,transparent_1px)] bg-[size:20px_20px] opacity-10"></div>
+      
+      {/* Abstract gradient shapes */}
+      <div className="absolute top-0 left-0 w-3/4 h-3/4 bg-gradient-to-br from-blue-300/20 to-indigo-300/30 rounded-full blur-3xl -translate-y-1/2 -translate-x-1/4"></div>
+      <div className="absolute bottom-0 right-0 w-2/3 h-2/3 bg-gradient-to-tl from-purple-300/20 to-pink-300/20 rounded-full blur-3xl translate-y-1/3 translate-x-1/4"></div>
       
       <div className="container mx-auto max-w-6xl px-4 relative z-10">
         <div className="flex flex-col md:flex-row items-center gap-12">
           <div ref={textRef} className="md:w-1/2 mb-12 md:mb-0">
-            <span className="text-blue-600 font-medium text-sm md:text-base bg-blue-50 px-4 py-1.5 rounded-full inline-block mb-4 animate-item">
+            <span className="text-blue-600 font-medium text-sm md:text-base bg-gradient-to-r from-blue-100 to-blue-200 px-4 py-1.5 rounded-full inline-block mb-4 animate-item shadow-sm">
               New Season Collection
             </span>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight text-gray-800 animate-item">
-              Premium <span className="text-blue-600">Footwear</span> For Your Journey
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight bg-gradient-to-br from-gray-800 to-gray-600 bg-clip-text text-transparent animate-item">
+              Premium <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Footwear</span> For Your Journey
             </h1>
             <p className="text-base md:text-lg mb-8 text-gray-600 max-w-lg leading-relaxed animate-item">
               Discover the latest trends in authentic designer shoes crafted with premium materials. Quality that speaks for itself, with comfort that lasts all day.
@@ -88,7 +92,7 @@ const HeroSection = () => {
               <Link to="/products">
                 <Button 
                   size="lg" 
-                  className="bg-blue-600 hover:bg-blue-700 text-white transition-all shadow-lg hover:shadow-blue-200 rounded-full"
+                  className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white transition-all shadow-lg hover:shadow-blue-300/30 rounded-full"
                 >
                   Shop Collection
                   <ArrowRight className="ml-2 h-4 w-4" />
@@ -98,7 +102,7 @@ const HeroSection = () => {
                 <Button 
                   size="lg" 
                   variant="outline" 
-                  className="border-2 bg-transparent text-blue-600 border-blue-200 hover:border-blue-400 hover:bg-blue-50 transition-all rounded-full"
+                  className="border-2 bg-white/80 backdrop-blur-sm text-blue-600 border-blue-200 hover:border-blue-400 hover:bg-blue-50 transition-all rounded-full"
                 >
                   Browse Categories
                 </Button>
@@ -108,8 +112,8 @@ const HeroSection = () => {
           
           <div className="md:w-1/2 flex justify-center items-center">
             <div className="relative h-72 w-72 md:h-96 md:w-96">
-              {/* Enhanced glow effect */}
-              <div className="shoe-glow absolute inset-0 bg-gradient-to-br from-blue-300/30 to-indigo-300/30 rounded-full blur-3xl"></div>
+              {/* Enhanced glow effect with gradient */}
+              <div className="shoe-glow absolute inset-0 bg-gradient-to-br from-blue-400/30 via-indigo-400/30 to-purple-400/20 rounded-full blur-3xl"></div>
               
               {/* Animated shoe */}
               <div 
@@ -132,13 +136,13 @@ const HeroSection = () => {
                 {[...Array(12)].map((_, i) => (
                   <div
                     key={i}
-                    className="absolute rounded-full bg-gradient-to-r from-blue-200 to-indigo-200"
+                    className="absolute rounded-full bg-gradient-to-r from-blue-300 to-indigo-400"
                     style={{
-                      width: Math.random() * 6 + 2 + "px",
-                      height: Math.random() * 6 + 2 + "px",
+                      width: Math.random() * 8 + 3 + "px",
+                      height: Math.random() * 8 + 3 + "px",
                       left: Math.random() * 100 + "%",
                       top: Math.random() * 100 + "%",
-                      opacity: Math.random() * 0.5 + 0.2,
+                      opacity: Math.random() * 0.5 + 0.3,
                       animation: `floatParticle ${Math.random() * 15 + 8}s linear infinite`
                     }}
                   ></div>
