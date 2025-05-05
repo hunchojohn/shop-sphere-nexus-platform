@@ -140,7 +140,8 @@ const HeroSection = () => {
       </div>
       
       {/* CSS for floating animation */}
-      <style jsx>{`
+      <style>
+        {`
         @keyframes float {
           0% {
             transform: translateY(0) translateX(0);
@@ -158,7 +159,8 @@ const HeroSection = () => {
             transform: translateY(0) translateX(0);
           }
         }
-      `}</style>
+        `}
+      </style>
     </section>
   );
 };

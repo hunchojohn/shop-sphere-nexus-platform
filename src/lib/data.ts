@@ -16,6 +16,9 @@ export interface Product {
   variants: ProductVariant[];
   rating: number;
   featured: boolean;
+  discountPercentage?: number;
+  isNew?: boolean;
+  originalPrice?: number;
 }
 
 export const categories = [
