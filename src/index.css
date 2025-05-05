@@ -52,14 +52,25 @@
     font-family: 'Poppins', sans-serif;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
+    overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
   }
 
   /* Improved SEO for headings */
   h1, h2, h3, h4, h5, h6 {
     @apply font-medium tracking-tight;
+  }
+
+  /* Links */
+  a {
+    @apply transition-colors duration-200;
   }
 }
 
@@ -150,4 +161,62 @@
   .payment-method-card.selected {
     @apply border-blue-600 bg-blue-50;
   }
+
+  /* Animation utilities */
+  .fade-in {
+    @apply animate-fade-in;
+  }
+  
+  .slide-up {
+    @apply animate-slide-up;
+  }
+  
+  .scale-in {
+    @apply transition-transform duration-300 transform hover:scale-105;
+  }
+  
+  .hover-translate {
+    @apply transition-transform duration-200 transform hover:-translate-y-1;
+  }
+  
+  /* Card hover effect */
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+  }
+  
+  /* Social icons */
+  .social-icon {
+    @apply text-gray-400 hover:text-blue-500 transition-colors duration-300;
+  }
+}
+
+/* Animation keyframes */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slide-up {
+  from { 
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Floating animation */
+.floating {
+  animation: float 4s ease-in-out infinite;
 }

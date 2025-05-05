@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Separator } from "@/components/ui/separator";
 import { getFeaturedProducts, getProductsByCategory, categories } from "@/lib/data";
 import Navbar from "@/components/Navbar";
@@ -8,9 +8,11 @@ import HeroSection from "@/components/home/HeroSection";
 import FeaturedProductsSection from "@/components/home/FeaturedProductsSection";
 import CategoryProductsSection from "@/components/home/CategoryProductsSection";
 import CollectionHighlights from "@/components/home/CollectionHighlights";
+import TestimonialsSection from "@/components/home/TestimonialsSection";
 import NewsletterSection from "@/components/home/NewsletterSection";
 import Footer from "@/components/home/Footer";
 import { Helmet } from "react-helmet";
+import gsap from "gsap";
 
 const Index = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -22,6 +24,15 @@ const Index = () => {
   const displayedProducts = searchResults !== null 
     ? searchResults 
     : categoryProducts;
+
+  useEffect(() => {
+    // Initialize GSAP animations for the page
+    gsap.fromTo(
+      ".animate-on-load",
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.8, stagger: 0.15, ease: "power3.out" }
+    );
+  }, []);
 
   const handleSearch = (term: string) => {
     if (!term) {
@@ -51,26 +62,34 @@ const Index = () => {
         <meta name="description" content="Shop the latest trends in footwear at PapiKicks. Authentic products, competitive prices, and fast delivery." />
       </Helmet>
       
-      <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900">
+      <div className="min-h-screen flex flex-col bg-white">
         <Navbar />
         <CartSidebar />
         
         <main>
           <HeroSection />
           
-          <FeaturedProductsSection products={featuredProducts} />
+          <div className="animate-on-load">
+            <FeaturedProductsSection products={featuredProducts} />
+          </div>
           
           <Separator className="container mx-auto max-w-6xl my-4" />
           
-          <CollectionHighlights />
+          <div className="animate-on-load">
+            <CollectionHighlights />
+          </div>
           
-          <CategoryProductsSection 
-            categories={categories}
-            selectedCategory={selectedCategory}
-            displayedProducts={displayedProducts}
-            onCategorySelect={handleCategorySelect}
-            onSearch={handleSearch}
-          />
+          <div className="animate-on-load">
+            <CategoryProductsSection 
+              categories={categories}
+              selectedCategory={selectedCategory}
+              displayedProducts={displayedProducts}
+              onCategorySelect={handleCategorySelect}
+              onSearch={handleSearch}
+            />
+          </div>
+          
+          <TestimonialsSection />
           
           <NewsletterSection />
         </main>
