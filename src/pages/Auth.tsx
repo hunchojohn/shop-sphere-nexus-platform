@@ -2,14 +2,11 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import Navbar from '@/components/Navbar';
-import { Helmet } from 'react-helmet';
-import { AlertCircle } from 'lucide-react';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import AuthLayout from '@/components/auth/AuthLayout';
+import LoginForm from '@/components/auth/LoginForm';
+import RegisterForm from '@/components/auth/RegisterForm';
+import AuthToggle from '@/components/auth/AuthToggle';
 
 export default function Auth() {
   const { isAuthenticated, login, register } = useAuth();
@@ -18,8 +15,6 @@ export default function Auth() {
   const [isLoginMode, setIsLoginMode] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [loginError, setLoginError] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -27,37 +22,28 @@ export default function Auth() {
     }
   }, [isAuthenticated, navigate]);
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleLogin = async (email: string, password: string) => {
     setIsLoading(true);
     setLoginError('');
     
-    const formData = new FormData(event.currentTarget);
-    const emailValue = formData.get('email') as string;
-    const passwordValue = formData.get('password') as string;
-    const isLogin = (event.currentTarget.dataset.action === 'login');
-
     try {
-      // Log the login attempt details for debugging
-      console.log(`Attempting to ${isLogin ? 'login' : 'register'} with email: ${emailValue}`);
+      console.log(`Attempting to login with email: ${email}`);
       
-      const result = isLogin 
-        ? await login(emailValue, passwordValue)
-        : await register(formData.get('name') as string || '', emailValue, passwordValue);
+      const result = await login(email, password);
 
       if (result.success) {
         toast({
           variant: "success",
-          title: isLogin ? "Welcome back!" : "Account created",
-          description: isLogin ? "You've been logged in successfully." : "Your account has been created successfully.",
+          title: "Welcome back!",
+          description: "You've been logged in successfully.",
         });
         navigate('/');
       } else {
-        setLoginError(result.message || (isLogin ? "Invalid email or password" : "Could not create account"));
+        setLoginError(result.message || "Invalid email or password");
         toast({
           variant: "destructive",
           title: "Error",
-          description: result.message || (isLogin ? "Invalid credentials" : "Could not create account"),
+          description: result.message || "Invalid credentials",
         });
       }
     } catch (error) {
@@ -73,149 +59,76 @@ export default function Auth() {
     }
   };
 
-  const fillAdminCredentials = () => {
-    setEmail("admin@example.com");
-    setPassword("admin123");
+  const handleRegister = async (name: string, email: string, password: string) => {
+    setIsLoading(true);
+    setLoginError('');
+    
+    try {
+      console.log(`Attempting to register with email: ${email}`);
+      
+      const result = await register(name, email, password);
+
+      if (result.success) {
+        toast({
+          variant: "success",
+          title: "Account created",
+          description: "Your account has been created successfully.",
+        });
+        navigate('/');
+      } else {
+        setLoginError(result.message || "Could not create account");
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: result.message || "Could not create account",
+        });
+      }
+    } catch (error) {
+      console.error("Auth error:", error);
+      setLoginError("An unexpected error occurred");
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "An unexpected error occurred",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-white to-gray-50">
-      <Helmet>
-        <title>PapiKicks - Sign In</title>
-        <meta name="description" content="Sign in to your PapiKicks account to access your profile, orders, and more." />
-      </Helmet>
-      <Navbar />
-      <div className="container mx-auto max-w-md py-12 px-4 flex-1 flex items-center">
-        <div className="w-full bg-white p-8 rounded-lg shadow-lg border border-gray-100 animate-fade-in">
-          <div className="space-y-6">
-            <div className="space-y-2 text-center">
-              <h1 className="text-3xl font-bold text-blue-600">Welcome to PapiKicks</h1>
-              <p className="text-gray-500">Enter your credentials to continue</p>
-            </div>
+    <AuthLayout 
+      title="Sign In" 
+      description="Sign in to your PapiKicks account to access your profile, orders, and more."
+    >
+      <div className="space-y-6">
+        <div className="space-y-2 text-center">
+          <h1 className="text-3xl font-bold text-blue-600">Welcome to PapiKicks</h1>
+          <p className="text-gray-500">Enter your credentials to continue</p>
+        </div>
 
-            <div className="flex justify-center mb-4">
-              <div className="inline-flex rounded-md shadow-sm" role="group">
-                <button
-                  type="button"
-                  onClick={() => setIsLoginMode(true)}
-                  className={`px-4 py-2 text-sm font-medium rounded-l-lg ${isLoginMode ? 'bg-blue-600 text-white' : 'bg-white text-gray-700 border border-gray-300'}`}
-                >
-                  Sign In
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setIsLoginMode(false)}
-                  className={`px-4 py-2 text-sm font-medium rounded-r-lg ${!isLoginMode ? 'bg-blue-600 text-white' : 'bg-white text-gray-700 border border-gray-300'}`}
-                >
-                  Register
-                </button>
-              </div>
-            </div>
+        <AuthToggle isLoginMode={isLoginMode} onToggle={setIsLoginMode} />
 
-            {loginError && (
-              <Alert variant="destructive" className="text-sm">
-                <AlertCircle className="h-4 w-4" />
-                <AlertDescription>{loginError}</AlertDescription>
-              </Alert>
-            )}
-
-            {isLoginMode ? (
-              <form onSubmit={handleSubmit} data-action="login" className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input 
-                    id="email" 
-                    name="email" 
-                    type="email" 
-                    required 
-                    className="focus-visible:ring-blue-600"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="password">Password</Label>
-                  <Input 
-                    id="password" 
-                    name="password" 
-                    type="password" 
-                    required 
-                    className="focus-visible:ring-blue-600"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                </div>
-                <Button 
-                  type="submit" 
-                  className="w-full"
-                  disabled={isLoading}
-                >
-                  {isLoading ? "Signing in..." : "Sign In"}
-                </Button>
-
-                <div className="text-center">
-                  <button 
-                    type="button"
-                    onClick={fillAdminCredentials}
-                    className="text-xs text-blue-600 hover:underline"
-                  >
-                    Use admin credentials
-                  </button>
-                  <p className="text-xs text-gray-500 mt-1">
-                    (Admin: admin@example.com / Password: admin123)
-                  </p>
-                </div>
-              </form>
-            ) : (
-              <form onSubmit={handleSubmit} data-action="register" className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="register-name">Full Name</Label>
-                  <Input 
-                    id="register-name" 
-                    name="name" 
-                    type="text" 
-                    required 
-                    className="focus-visible:ring-blue-600"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="register-email">Email</Label>
-                  <Input 
-                    id="register-email" 
-                    name="email" 
-                    type="email" 
-                    required 
-                    className="focus-visible:ring-blue-600"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="register-password">Password</Label>
-                  <Input 
-                    id="register-password" 
-                    name="password" 
-                    type="password" 
-                    required 
-                    className="focus-visible:ring-blue-600"
-                  />
-                </div>
-                <Button 
-                  type="submit" 
-                  className="w-full"
-                  disabled={isLoading}
-                >
-                  {isLoading ? "Creating Account..." : "Create Account"}
-                </Button>
-              </form>
-            )}
-              
-            <div className="text-center text-sm">
-              <Link to="/" className="text-blue-600 hover:underline">
-                Return to home page
-              </Link>
-            </div>
-          </div>
+        {isLoginMode ? (
+          <LoginForm 
+            onSubmit={handleLogin} 
+            isLoading={isLoading} 
+            error={loginError} 
+          />
+        ) : (
+          <RegisterForm 
+            onSubmit={handleRegister} 
+            isLoading={isLoading} 
+            error={loginError} 
+          />
+        )}
+          
+        <div className="text-center text-sm">
+          <Link to="/" className="text-blue-600 hover:underline">
+            Return to home page
+          </Link>
         </div>
       </div>
-    </div>
+    </AuthLayout>
   );
 }
