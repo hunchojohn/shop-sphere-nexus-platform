@@ -18,6 +18,8 @@ export default function Auth() {
   const [isLoginMode, setIsLoginMode] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [loginError, setLoginError] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -39,11 +41,11 @@ export default function Auth() {
       // Log the login attempt details for debugging
       console.log(`Attempting to ${isLogin ? 'login' : 'register'} with email: ${email}`);
       
-      const success = isLogin 
+      const result = isLogin 
         ? await login(email, password)
         : await register(formData.get('name') as string || '', email, password);
 
-      if (success) {
+      if (result.success) {
         toast({
           variant: "success",
           title: isLogin ? "Welcome back!" : "Account created",
@@ -51,11 +53,11 @@ export default function Auth() {
         });
         navigate('/');
       } else {
-        setLoginError(isLogin ? "Invalid email or password" : "Could not create account");
+        setLoginError(result.message || (isLogin ? "Invalid email or password" : "Could not create account"));
         toast({
           variant: "destructive",
           title: "Error",
-          description: isLogin ? "Invalid credentials" : "Could not create account",
+          description: result.message || (isLogin ? "Invalid credentials" : "Could not create account"),
         });
       }
     } catch (error) {
@@ -72,12 +74,8 @@ export default function Auth() {
   };
 
   const fillAdminCredentials = () => {
-    const emailInput = document.getElementById('email') as HTMLInputElement;
-    const passwordInput = document.getElementById('password') as HTMLInputElement;
-    if (emailInput && passwordInput) {
-      emailInput.value = "admin@example.com";
-      passwordInput.value = "admin123";
-    }
+    setEmail("admin@example.com");
+    setPassword("admin123");
   };
 
   return (
@@ -131,6 +129,8 @@ export default function Auth() {
                     type="email" 
                     required 
                     className="focus-visible:ring-blue-600"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
                 <div className="space-y-2">
@@ -141,6 +141,8 @@ export default function Auth() {
                     type="password" 
                     required 
                     className="focus-visible:ring-blue-600"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
                 <Button 

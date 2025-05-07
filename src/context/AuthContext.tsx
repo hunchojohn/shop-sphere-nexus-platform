@@ -8,8 +8,8 @@ interface AuthContextType {
   session: Session | null;
   isAuthenticated: boolean;
   isAdmin: boolean;
-  login: (email: string, password: string) => Promise<boolean>;
-  register: (name: string, email: string, password: string) => Promise<boolean>;
+  login: (email: string, password: string) => Promise<{success: boolean, message: string}>;
+  register: (name: string, email: string, password: string) => Promise<{success: boolean, message: string}>;
   logout: () => Promise<void>;
 }
 
@@ -50,9 +50,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return () => subscription.unsubscribe();
   }, []);
 
-  const login = async (email: string, password: string): Promise<boolean> => {
+  const login = async (email: string, password: string): Promise<{success: boolean, message: string}> => {
     try {
       console.log(`Attempting to login with email: ${email}`);
+      
+      // Hardcoded check for demo admin account
+      if (email === 'admin@example.com' && password === 'admin123') {
+        // Special handling for demo admin account
+        console.log("Using demo admin account");
+      }
       
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
@@ -61,18 +67,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       if (error) {
         console.error("Login error:", error.message);
-        return false;
+        return { success: false, message: error.message };
       }
       
       console.log("Login successful:", data.user?.email);
-      return true;
+      return { success: true, message: "Login successful" };
     } catch (error) {
       console.error("Login exception:", error);
-      return false;
+      return { success: false, message: "An unexpected error occurred" };
     }
   };
 
-  const register = async (name: string, email: string, password: string): Promise<boolean> => {
+  const register = async (name: string, email: string, password: string): Promise<{success: boolean, message: string}> => {
     try {
       // Add admin role if registering with admin@example.com
       const metadata = {
@@ -90,14 +96,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       if (error) {
         console.error("Registration error:", error.message);
-        return false;
+        return { success: false, message: error.message };
       }
       
       console.log("Registration successful:", data.user?.email);
-      return !!data.user;
+      return { success: true, message: "Registration successful" };
     } catch (error) {
       console.error("Registration error:", error);
-      return false;
+      return { success: false, message: "An unexpected error occurred" };
     }
   };
 

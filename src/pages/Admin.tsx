@@ -7,7 +7,7 @@ import AdminDashboard from './admin/Dashboard';
 import { Loader2 } from 'lucide-react';
 
 export default function Admin() {
-  const { user } = useAuth();
+  const { user, isAdmin } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(true);
@@ -16,13 +16,27 @@ export default function Admin() {
     const checkAdminAccess = async () => {
       if (!user) {
         setIsLoading(false);
+        toast({
+          variant: "destructive",
+          title: "Authentication Required",
+          description: "Please login to access the admin area",
+        });
         navigate('/auth');
         return;
       }
 
       try {
-        // Special case for admin@example.com
+        // If using the isAdmin from context
+        if (isAdmin) {
+          console.log("Admin access granted via isAdmin flag");
+          setIsLoading(false);
+          return; // Allow access immediately
+        }
+
+        // Special case for admin@example.com - already covered by isAdmin flag but
+        // keeping as a fallback
         if (user.email === 'admin@example.com') {
+          console.log("Admin access granted for admin@example.com");
           setIsLoading(false);
           return; // Allow access immediately
         }
@@ -32,13 +46,20 @@ export default function Admin() {
           .rpc('has_role', { requested_role: 'admin' })
           .single();
 
-        if (error || !data) {
+        if (error) {
+          console.error("Error checking admin role:", error);
+          throw new Error(error.message);
+        }
+
+        if (!data) {
           toast({
             variant: "destructive",
             title: "Access Denied",
             description: "You don't have permission to access this page",
           });
           navigate('/');
+        } else {
+          console.log("Admin access granted via database role check");
         }
       } catch (error) {
         console.error("Error checking admin access:", error);
@@ -54,7 +75,7 @@ export default function Admin() {
     };
 
     checkAdminAccess();
-  }, [user, navigate, toast]);
+  }, [user, navigate, toast, isAdmin]);
 
   if (isLoading) {
     return (
