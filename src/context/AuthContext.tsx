@@ -7,7 +7,7 @@ interface AuthContextType {
   user: User | null;
   session: Session | null;
   isAuthenticated: boolean;
-  isAdmin: boolean; // Add isAdmin property
+  isAdmin: boolean;
   login: (email: string, password: string) => Promise<boolean>;
   register: (name: string, email: string, password: string) => Promise<boolean>;
   logout: () => Promise<void>;
@@ -21,24 +21,30 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const isAuthenticated = !!user;
-  // Check if user is admin based on email
-  const isAdmin = user?.email === 'admin@example.com';
+  
+  // Consider a user admin if:
+  // 1. They have the exact email 'admin@example.com' (hardcoded admin for testing)
+  // 2. OR they have the 'admin' role in user_metadata
+  const isAdmin = !!user && (
+    user.email === 'admin@example.com' || 
+    user.user_metadata?.role === 'admin'
+  );
 
   useEffect(() => {
     // Set up auth state listener first
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        console.log("Auth state changed:", event, session?.user?.email);
-        setSession(session);
-        setUser(session?.user ?? null);
+      (event, currentSession) => {
+        console.log("Auth state changed:", event, currentSession?.user?.email);
+        setSession(currentSession);
+        setUser(currentSession?.user ?? null);
       }
     );
 
     // Then check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      console.log("Initial session check:", session?.user?.email);
-      setSession(session);
-      setUser(session?.user ?? null);
+    supabase.auth.getSession().then(({ data: { session: currentSession } }) => {
+      console.log("Initial session check:", currentSession?.user?.email);
+      setSession(currentSession);
+      setUser(currentSession?.user ?? null);
     });
 
     return () => subscription.unsubscribe();
@@ -68,13 +74,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const register = async (name: string, email: string, password: string): Promise<boolean> => {
     try {
+      // Add admin role if registering with admin@example.com
+      const metadata = {
+        first_name: name,
+        role: email === 'admin@example.com' ? 'admin' : 'customer'
+      };
+      
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
-          data: {
-            first_name: name
-          }
+          data: metadata
         }
       });
       

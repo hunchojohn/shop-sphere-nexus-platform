@@ -14,7 +14,10 @@ import {
   Search, 
   Moon, 
   Sun, 
-  LogOut
+  LogOut,
+  Tag,
+  Percent,
+  MessageSquare
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -39,6 +42,7 @@ const navItems: NavItem[] = [
   { label: 'Orders', href: '/admin/orders', icon: ShoppingCart },
   { label: 'Users', href: '/admin/users', icon: Users },
   { label: 'Analytics', href: '/admin/analytics', icon: ChartBar },
+  { label: 'Marketing', href: '/admin/marketing', icon: Percent },
   { label: 'Settings', href: '/admin/settings', icon: Settings },
 ];
 
@@ -128,9 +132,9 @@ export default function AdminLayout() {
               <Button 
                 variant="ghost" 
                 size="icon" 
-                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
               >
-                {theme === 'dark' ? (
+                {theme === "dark" ? (
                   <Sun className="h-5 w-5" />
                 ) : (
                   <Moon className="h-5 w-5" />

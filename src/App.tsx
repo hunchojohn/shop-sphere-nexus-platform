@@ -16,6 +16,7 @@ import AdminOrders from "./pages/admin/Orders";
 import AdminProducts from "./pages/admin/Products";
 import AdminAnalytics from "./pages/admin/Analytics";
 import AdminSettings from "./pages/admin/Settings";
+import AdminMarketing from "./pages/admin/Marketing";
 import AdminLayout from "./components/admin/AdminLayout";
 import Checkout from "./pages/Checkout";
 import CheckoutSuccess from "./pages/CheckoutSuccess";
@@ -56,6 +57,7 @@ const App = () => (
                   <Route path="orders" element={<AdminOrders />} />
                   <Route path="products" element={<AdminProducts />} />
                   <Route path="analytics" element={<AdminAnalytics />} />
+                  <Route path="marketing" element={<AdminMarketing />} />
                   <Route path="settings" element={<AdminSettings />} />
                 </Route>
                 <Route path="/product/:id" element={<ProductDetail />} />
