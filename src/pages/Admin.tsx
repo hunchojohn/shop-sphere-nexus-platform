@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
@@ -26,15 +27,14 @@ export default function Admin() {
       }
 
       try {
-        // If using the isAdmin from context
+        // If using the isAdmin from context - primary way to check
         if (isAdmin) {
           console.log("Admin access granted via isAdmin flag");
           setIsLoading(false);
           return; // Allow access immediately
         }
 
-        // Special case for admin@example.com - already covered by isAdmin flag but
-        // keeping as a fallback
+        // Special case for admin@example.com
         if (user.email === 'admin@example.com') {
           console.log("Admin access granted for admin@example.com");
           setIsLoading(false);
@@ -48,7 +48,7 @@ export default function Admin() {
 
         if (error) {
           console.error("Error checking admin role:", error);
-          throw new Error(error.message);
+          throw error;
         }
 
         if (!data) {

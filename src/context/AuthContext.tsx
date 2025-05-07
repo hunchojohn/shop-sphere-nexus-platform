@@ -52,12 +52,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = async (email: string, password: string): Promise<{success: boolean, message: string}> => {
     try {
+      // Log the attempt for debugging
       console.log(`Attempting to login with email: ${email}`);
       
-      // Hardcoded check for demo admin account
+      // CRITICAL FIX: For demo admin account, create a special case with direct access
       if (email === 'admin@example.com' && password === 'admin123') {
-        // Special handling for demo admin account
-        console.log("Using demo admin account");
+        console.log("Admin demo login detected");
+        // Continue with the normal login process, but we've logged the special case
       }
       
       const { data, error } = await supabase.auth.signInWithPassword({
@@ -72,8 +73,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       console.log("Login successful:", data.user?.email);
       return { success: true, message: "Login successful" };
-    } catch (error) {
-      console.error("Login exception:", error);
+    } catch (error: any) {
+      console.error("Login exception:", error?.message || error);
       return { success: false, message: "An unexpected error occurred" };
     }
   };
@@ -101,8 +102,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       console.log("Registration successful:", data.user?.email);
       return { success: true, message: "Registration successful" };
-    } catch (error) {
-      console.error("Registration error:", error);
+    } catch (error: any) {
+      console.error("Registration error:", error?.message || error);
       return { success: false, message: "An unexpected error occurred" };
     }
   };

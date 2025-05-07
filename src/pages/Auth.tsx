@@ -33,17 +33,17 @@ export default function Auth() {
     setLoginError('');
     
     const formData = new FormData(event.currentTarget);
-    const email = formData.get('email') as string;
-    const password = formData.get('password') as string;
+    const emailValue = formData.get('email') as string;
+    const passwordValue = formData.get('password') as string;
     const isLogin = (event.currentTarget.dataset.action === 'login');
 
     try {
       // Log the login attempt details for debugging
-      console.log(`Attempting to ${isLogin ? 'login' : 'register'} with email: ${email}`);
+      console.log(`Attempting to ${isLogin ? 'login' : 'register'} with email: ${emailValue}`);
       
       const result = isLogin 
-        ? await login(email, password)
-        : await register(formData.get('name') as string || '', email, password);
+        ? await login(emailValue, passwordValue)
+        : await register(formData.get('name') as string || '', emailValue, passwordValue);
 
       if (result.success) {
         toast({
