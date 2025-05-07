@@ -1,7 +1,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 
-type Theme = "light";
+type Theme = "light" | "dark"; // Updated to support both themes
 
 type ThemeProviderProps = {
   children: React.ReactNode;
@@ -27,17 +27,28 @@ export function ThemeProvider({
   storageKey = "vite-ui-theme",
   ...props
 }: ThemeProviderProps) {
-  const [theme] = useState<Theme>("light");
+  const [theme, setTheme] = useState<Theme>(
+    () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
+  );
 
   useEffect(() => {
     const root = window.document.documentElement;
-    root.classList.remove("dark");
-    root.classList.add("light");
-  }, []);
+    
+    // Remove both classes first
+    root.classList.remove("light", "dark");
+    
+    // Then add the current theme
+    root.classList.add(theme);
+    
+    // Save to localStorage
+    localStorage.setItem(storageKey, theme);
+  }, [theme, storageKey]);
 
   const value = {
     theme,
-    setTheme: () => {}, // No-op since we're removing theme toggle
+    setTheme: (newTheme: Theme) => {
+      setTheme(newTheme);
+    },
   };
 
   return (
@@ -55,5 +66,3 @@ export const useTheme = () => {
 
   return context;
 };
-
-// Remove ThemeToggle component as it's no longer needed
