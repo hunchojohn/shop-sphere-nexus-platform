@@ -29,27 +29,17 @@ const queryClient = new QueryClient();
 
 // Create a protected route component for admin routes
 const AdminRoute = ({ element }: { element: React.ReactNode }) => {
-  const { isAuthenticated, isAdmin } = useAuth();
+  const { isAuthenticated } = useAuth();
   
   if (!isAuthenticated) {
     return <Navigate to="/auth" replace />;
   }
   
-  if (!isAdmin) {
-    return <Navigate to="/" replace />;
-  }
-  
   return <>{element}</>;
 };
 
-// Home route that redirects admins to admin panel
+// Home route 
 const HomeRoute = () => {
-  const { isAuthenticated, isAdmin } = useAuth();
-  
-  if (isAuthenticated && isAdmin) {
-    return <Navigate to="/admin" replace />;
-  }
-  
   return <Index />;
 };
 

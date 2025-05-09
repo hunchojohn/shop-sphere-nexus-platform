@@ -4,8 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { Package, Plus } from 'lucide-react';
-import { Database } from '@/integrations/supabase/types';
+import { Package, Plus, Loader2 } from 'lucide-react';
 import {
   Card,
   CardContent,
@@ -18,7 +17,18 @@ import ProductList from '@/components/admin/products/ProductList';
 import ProductForm from '@/components/admin/products/ProductForm';
 import { confirmAction } from '@/utils/formatters';
 
-type Product = Database['public']['Tables']['products']['Row'];
+type Product = {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  category: string;
+  stock: number;
+  image_url: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
 type ProductInput = Omit<Product, 'id' | 'created_at' | 'updated_at'>;
 
 export default function AdminProducts() {
@@ -31,129 +41,124 @@ export default function AdminProducts() {
   const [openDialog, setOpenDialog] = useState(false);
 
   useEffect(() => {
-    const checkAdminAccess = async () => {
-      const { data, error } = await supabase
-        .rpc('has_role', { requested_role: 'admin' })
-        .single();
+    if (!user) {
+      navigate('/auth');
+      return;
+    }
+    
+    fetchProducts();
+  }, [user, navigate]);
 
-      if (error || !data) {
-        toast({
-          variant: "destructive",
-          title: "Access Denied",
-          description: "You don't have permission to access this page",
-        });
-        navigate('/');
-      }
-    };
-
-    const fetchProducts = async () => {
+  const fetchProducts = async () => {
+    try {
+      setLoading(true);
       const { data, error } = await supabase
         .from('products')
         .select('*')
         .order('created_at', { ascending: false });
 
       if (error) {
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: "Failed to fetch products",
-        });
-        return;
+        throw error;
       }
 
       setProducts(data || []);
-      setLoading(false);
-    };
-
-    if (user) {
-      checkAdminAccess();
-      fetchProducts();
-    } else {
-      navigate('/auth');
-    }
-  }, [user, navigate, toast]);
-
-  const handleCreate = async (productData: ProductInput) => {
-    const { error } = await supabase
-      .from('products')
-      .insert([productData]);
-
-    if (error) {
+    } catch (error: any) {
+      console.error("Error fetching products:", error.message);
       toast({
         variant: "destructive",
         title: "Error",
-        description: "Failed to create product",
+        description: "Failed to fetch products. Please try again later.",
       });
-      return;
+    } finally {
+      setLoading(false);
     }
+  };
 
-    // Refresh products list
-    const { data: newProducts } = await supabase
-      .from('products')
-      .select('*')
-      .order('created_at', { ascending: false });
-    
-    setProducts(newProducts || []);
-    setOpenDialog(false);
-    
-    toast({
-      title: "Success",
-      description: "Product created successfully",
-    });
+  const handleCreate = async (productData: ProductInput) => {
+    try {
+      const { error } = await supabase
+        .from('products')
+        .insert([productData]);
+
+      if (error) {
+        throw error;
+      }
+
+      toast({
+        title: "Success",
+        description: "Product created successfully",
+      });
+      
+      await fetchProducts();
+      setOpenDialog(false);
+    } catch (error: any) {
+      console.error("Error creating product:", error.message);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.message || "Failed to create product",
+      });
+    }
   };
 
   const handleUpdate = async (updates: ProductInput) => {
     if (!selectedProduct) return;
     
-    const { error } = await supabase
-      .from('products')
-      .update(updates)
-      .eq('id', selectedProduct.id);
+    try {
+      const { error } = await supabase
+        .from('products')
+        .update(updates)
+        .eq('id', selectedProduct.id);
 
-    if (error) {
+      if (error) {
+        throw error;
+      }
+
+      toast({
+        title: "Success",
+        description: "Product updated successfully",
+      });
+      
+      await fetchProducts();
+      setOpenDialog(false);
+      setSelectedProduct(null);
+    } catch (error: any) {
+      console.error("Error updating product:", error.message);
       toast({
         variant: "destructive",
         title: "Error",
-        description: "Failed to update product",
+        description: error.message || "Failed to update product",
       });
-      return;
     }
-
-    setProducts(products.map(p => 
-      p.id === selectedProduct.id ? { ...p, ...updates } : p
-    ));
-    setOpenDialog(false);
-    setSelectedProduct(null);
-    
-    toast({
-      title: "Success",
-      description: "Product updated successfully",
-    });
   };
 
   const handleDelete = async (id: string) => {
     if (!confirmAction("Are you sure you want to delete this product?")) return;
     
-    const { error } = await supabase
-      .from('products')
-      .delete()
-      .eq('id', id);
+    try {
+      const { error } = await supabase
+        .from('products')
+        .delete()
+        .eq('id', id);
 
-    if (error) {
+      if (error) {
+        throw error;
+      }
+
+      toast({
+        title: "Success",
+        description: "Product deleted successfully",
+      });
+      
+      await fetchProducts();
+    } catch (error: any) {
+      console.error("Error deleting product:", error.message);
       toast({
         variant: "destructive",
         title: "Error",
-        description: "Failed to delete product",
+        description: error.message || "Failed to delete product",
       });
-      return;
     }
-
-    setProducts(products.filter(p => p.id !== id));
-    
-    toast({
-      title: "Success",
-      description: "Product deleted successfully",
-    });
   };
 
   const handleFormSubmit = (productData: ProductInput) => {
@@ -176,8 +181,11 @@ export default function AdminProducts() {
 
   if (loading) {
     return (
-      <div className="container mx-auto py-6">
-        <p>Loading...</p>
+      <div className="flex h-full items-center justify-center p-8">
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin text-orange-600 mx-auto mb-4" />
+          <p className="text-muted-foreground">Loading products...</p>
+        </div>
       </div>
     );
   }
@@ -187,13 +195,13 @@ export default function AdminProducts() {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <div className="flex items-center space-x-2">
-            <Package className="h-6 w-6" />
+            <Package className="h-6 w-6 text-orange-600" />
             <div>
               <CardTitle>Product Management</CardTitle>
               <CardDescription>Add, edit, and manage your products</CardDescription>
             </div>
           </div>
-          <Button onClick={() => setOpenDialog(true)}>
+          <Button onClick={() => setOpenDialog(true)} className="bg-orange-600 hover:bg-orange-700">
             <Plus className="mr-2 h-4 w-4" /> Add Product
           </Button>
         </CardHeader>

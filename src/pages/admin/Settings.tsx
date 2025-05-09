@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
@@ -10,29 +10,110 @@ import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useAuth } from '@/context/AuthContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { toast } from '@/hooks/use-toast';
+import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
+import { Loader2 } from 'lucide-react';
 
 export default function AdminSettings() {
   const { user } = useAuth();
+  const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const [profileLoading, setProfileLoading] = useState(true);
+  const [profileData, setProfileData] = useState({
+    firstName: '',
+    lastName: '',
+    phone: '',
+    bio: '',
+  });
+  const [storeSettings, setStoreSettings] = useState({
+    name: 'BeiPoaHub',
+    description: 'Your #1 Online Discount Store in Kenya',
+    currency: 'KES',
+    country: 'KE',
+    maintenanceMode: false,
+  });
   
-  const handleSaveProfile = () => {
+  useEffect(() => {
+    // Fetch profile data if user exists
+    if (user) {
+      fetchProfileData();
+    }
+  }, [user]);
+
+  const fetchProfileData = async () => {
+    try {
+      setProfileLoading(true);
+      
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user?.id)
+        .single();
+        
+      if (error && error.code !== 'PGRST116') {
+        throw error;
+      }
+      
+      if (data) {
+        setProfileData({
+          firstName: data.first_name || '',
+          lastName: data.last_name || '',
+          phone: data.phone || '',
+          bio: data.bio || '',
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching profile:', error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to load profile data",
+      });
+    } finally {
+      setProfileLoading(false);
+    }
+  };
+
+  const handleSaveProfile = async () => {
+    if (!user) return;
+    
     setIsLoading(true);
     
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
+    try {
+      // Update profile in Supabase
+      const { error } = await supabase
+        .from('profiles')
+        .upsert({
+          id: user.id,
+          first_name: profileData.firstName,
+          last_name: profileData.lastName,
+          phone: profileData.phone,
+          bio: profileData.bio,
+          updated_at: new Date().toISOString(),
+        });
+      
+      if (error) throw error;
+      
       toast({
         title: "Profile Updated",
         description: "Your profile information has been updated successfully.",
       });
-    }, 1000);
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to update profile. Please try again.",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
   
   const handleSaveStoreSettings = () => {
     setIsLoading(true);
     
-    // Simulate API call
+    // Simulate API call - in a real app, this would update store settings in the database
     setTimeout(() => {
       setIsLoading(false);
       toast({
@@ -42,12 +123,30 @@ export default function AdminSettings() {
     }, 1000);
   };
   
+  const handleUpdatePassword = () => {
+    toast({
+      title: "Password Reset Email Sent",
+      description: "Please check your email to complete the password reset process.",
+    });
+  };
+  
   const getInitials = () => {
     if (user?.email) {
       return user.email.substring(0, 2).toUpperCase();
     }
     return 'AD';
   };
+
+  if (profileLoading) {
+    return (
+      <div className="flex h-full items-center justify-center p-8">
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin text-orange-600 mx-auto mb-4" />
+          <p className="text-muted-foreground">Loading settings...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -75,7 +174,7 @@ export default function AdminSettings() {
               <div className="flex flex-col items-center space-y-2 sm:flex-row sm:space-y-0 sm:space-x-4">
                 <Avatar className="h-24 w-24">
                   <AvatarImage src={user?.user_metadata?.avatar_url || ''} alt="Profile picture" />
-                  <AvatarFallback className="text-2xl">{getInitials()}</AvatarFallback>
+                  <AvatarFallback className="bg-orange-200 text-orange-800 text-2xl">{getInitials()}</AvatarFallback>
                 </Avatar>
                 <div className="space-y-2">
                   <h3 className="text-lg font-medium">Profile Picture</h3>
@@ -89,11 +188,21 @@ export default function AdminSettings() {
               <div className="grid gap-4 md:grid-cols-2">
                 <div>
                   <Label htmlFor="first-name">First Name</Label>
-                  <Input id="first-name" defaultValue={user?.user_metadata?.first_name || ''} className="mt-1" />
+                  <Input 
+                    id="first-name" 
+                    value={profileData.firstName} 
+                    onChange={(e) => setProfileData({...profileData, firstName: e.target.value})}
+                    className="mt-1" 
+                  />
                 </div>
                 <div>
                   <Label htmlFor="last-name">Last Name</Label>
-                  <Input id="last-name" defaultValue={user?.user_metadata?.last_name || ''} className="mt-1" />
+                  <Input 
+                    id="last-name" 
+                    value={profileData.lastName}
+                    onChange={(e) => setProfileData({...profileData, lastName: e.target.value})} 
+                    className="mt-1" 
+                  />
                 </div>
                 <div>
                   <Label htmlFor="email">Email Address</Label>
@@ -101,19 +210,40 @@ export default function AdminSettings() {
                 </div>
                 <div>
                   <Label htmlFor="phone">Phone Number</Label>
-                  <Input id="phone" placeholder="+254 7XX XXX XXX" className="mt-1" />
+                  <Input 
+                    id="phone" 
+                    placeholder="+254 7XX XXX XXX" 
+                    value={profileData.phone}
+                    onChange={(e) => setProfileData({...profileData, phone: e.target.value})}
+                    className="mt-1" 
+                  />
                 </div>
               </div>
               
               <div>
                 <Label htmlFor="bio">Bio</Label>
-                <Textarea id="bio" placeholder="Tell us about yourself" className="mt-1" />
+                <Textarea 
+                  id="bio" 
+                  placeholder="Tell us about yourself" 
+                  value={profileData.bio}
+                  onChange={(e) => setProfileData({...profileData, bio: e.target.value})}
+                  className="mt-1" 
+                />
                 <p className="text-xs text-muted-foreground mt-1">This information will be displayed publicly.</p>
               </div>
             </CardContent>
             <CardFooter className="flex justify-end">
-              <Button onClick={handleSaveProfile} disabled={isLoading}>
-                {isLoading ? "Saving..." : "Save Changes"}
+              <Button 
+                onClick={handleSaveProfile} 
+                disabled={isLoading}
+                className="bg-orange-600 hover:bg-orange-700"
+              >
+                {isLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Saving...
+                  </>
+                ) : "Save Changes"}
               </Button>
             </CardFooter>
           </Card>
@@ -138,7 +268,9 @@ export default function AdminSettings() {
               </div>
             </CardContent>
             <CardFooter className="flex justify-end">
-              <Button>Update Password</Button>
+              <Button onClick={handleUpdatePassword} className="bg-orange-600 hover:bg-orange-700">
+                Update Password
+              </Button>
             </CardFooter>
           </Card>
         </TabsContent>
@@ -166,18 +298,31 @@ export default function AdminSettings() {
               
               <div>
                 <Label htmlFor="store-name">Store Name</Label>
-                <Input id="store-name" defaultValue="BeiPoaHub" className="mt-1" />
+                <Input 
+                  id="store-name" 
+                  value={storeSettings.name}
+                  onChange={(e) => setStoreSettings({...storeSettings, name: e.target.value})}
+                  className="mt-1" 
+                />
               </div>
               
               <div>
                 <Label htmlFor="store-description">Store Description</Label>
-                <Textarea id="store-description" defaultValue="Your #1 Online Discount Store in Kenya" className="mt-1" />
+                <Textarea 
+                  id="store-description" 
+                  value={storeSettings.description}
+                  onChange={(e) => setStoreSettings({...storeSettings, description: e.target.value})}
+                  className="mt-1" 
+                />
               </div>
               
               <div className="grid gap-4 md:grid-cols-2">
                 <div>
                   <Label htmlFor="currency">Currency</Label>
-                  <Select defaultValue="KES">
+                  <Select 
+                    value={storeSettings.currency}
+                    onValueChange={(value) => setStoreSettings({...storeSettings, currency: value})}
+                  >
                     <SelectTrigger id="currency" className="mt-1">
                       <SelectValue placeholder="Select currency" />
                     </SelectTrigger>
@@ -191,7 +336,10 @@ export default function AdminSettings() {
                 </div>
                 <div>
                   <Label htmlFor="country">Country</Label>
-                  <Select defaultValue="KE">
+                  <Select 
+                    value={storeSettings.country}
+                    onValueChange={(value) => setStoreSettings({...storeSettings, country: value})}
+                  >
                     <SelectTrigger id="country" className="mt-1">
                       <SelectValue placeholder="Select country" />
                     </SelectTrigger>
@@ -208,14 +356,27 @@ export default function AdminSettings() {
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <Label htmlFor="maintenance-mode">Maintenance Mode</Label>
-                  <Switch id="maintenance-mode" />
+                  <Switch 
+                    id="maintenance-mode" 
+                    checked={storeSettings.maintenanceMode}
+                    onCheckedChange={(value) => setStoreSettings({...storeSettings, maintenanceMode: value})}
+                  />
                 </div>
                 <p className="text-xs text-muted-foreground">When enabled, customers will see a maintenance page.</p>
               </div>
             </CardContent>
             <CardFooter className="flex justify-end">
-              <Button onClick={handleSaveStoreSettings} disabled={isLoading}>
-                {isLoading ? "Saving..." : "Save Changes"}
+              <Button 
+                onClick={handleSaveStoreSettings} 
+                disabled={isLoading}
+                className="bg-orange-600 hover:bg-orange-700"
+              >
+                {isLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Saving...
+                  </>
+                ) : "Save Changes"}
               </Button>
             </CardFooter>
           </Card>

@@ -1,17 +1,49 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import CartSidebar from "@/components/CartSidebar";
 import ProductGrid from "@/components/ProductGrid";
 import SearchBar from "@/components/SearchBar";
 import CategoryFilter from "@/components/CategoryFilter";
-import { getAllProducts, categories } from "@/lib/data";
+import { supabase } from "@/integrations/supabase/client";
+import { Loader2 } from "lucide-react";
 
 const Products = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchResults, setSearchResults] = useState<null | any[]>(null);
+  const [allProducts, setAllProducts] = useState<any[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const allProducts = getAllProducts();
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const fetchProducts = async () => {
+    try {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from('products')
+        .select('*');
+      
+      if (error) throw error;
+      
+      if (data) {
+        setAllProducts(data);
+        
+        // Extract unique categories
+        const uniqueCategories = Array.from(
+          new Set(data.map(product => product.category))
+        );
+        setCategories(["All", ...uniqueCategories]);
+      }
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
   const filteredProducts = selectedCategory === "All" 
     ? allProducts
     : allProducts.filter(p => p.category === selectedCategory);
@@ -26,7 +58,6 @@ const Products = () => {
       return;
     }
     
-    // Simple search implementation
     const results = filteredProducts.filter(product => 
       product.name.toLowerCase().includes(term.toLowerCase()) ||
       product.description.toLowerCase().includes(term.toLowerCase()) ||
@@ -40,6 +71,21 @@ const Products = () => {
     setSelectedCategory(category);
     setSearchResults(null); // Clear search results when changing category
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col bg-gradient-to-br from-amber-50 to-orange-50">
+        <Navbar />
+        <CartSidebar />
+        <div className="flex h-full items-center justify-center p-12">
+          <div className="text-center">
+            <Loader2 className="h-10 w-10 animate-spin text-orange-600 mx-auto mb-4" />
+            <p className="text-lg text-gray-600">Loading products...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-amber-50 to-orange-50">

@@ -29,6 +29,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
+import { useToast } from '@/hooks/use-toast';
 
 type NavItem = {
   label: string;
@@ -47,14 +48,15 @@ const navItems: NavItem[] = [
 ];
 
 export default function AdminLayout() {
-  const { user, logout, isAdmin } = useAuth();
+  const { user, logout } = useAuth();
   const location = useLocation();
   const { theme, setTheme } = useTheme();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const { toast } = useToast();
 
-  // Redirect non-admin users to the home page
-  if (!isAdmin) {
-    return <Navigate to="/" replace />;
+  // Remove the isAdmin check - allow all logged in users to access admin panel
+  if (!user) {
+    return <Navigate to="/auth" replace />;
   }
 
   const toggleSidebar = () => {
@@ -62,7 +64,20 @@ export default function AdminLayout() {
   };
 
   const handleLogout = async () => {
-    await logout();
+    try {
+      await logout();
+      toast({
+        title: "Logged out",
+        description: "You have been successfully logged out.",
+      });
+    } catch (error) {
+      console.error("Logout error:", error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "There was a problem logging out. Please try again.",
+      });
+    }
   };
 
   const getInitials = () => {
@@ -83,7 +98,7 @@ export default function AdminLayout() {
         {/* Logo */}
         <div className="p-4 flex justify-between items-center border-b border-border">
           {!sidebarCollapsed && (
-            <h2 className="text-xl font-bold">PapiKicks</h2>
+            <h2 className="text-xl font-bold text-orange-600">BeiPoaHub</h2>
           )}
           <Button variant="ghost" size="icon" onClick={toggleSidebar}>
             <ChevronLeft className={`h-5 w-5 transition-transform duration-300 ${sidebarCollapsed ? 'rotate-180' : ''}`} />
@@ -99,8 +114,8 @@ export default function AdminLayout() {
                   to={item.href}
                   className={`flex items-center px-3 py-2 rounded-md transition-colors ${
                     location.pathname === item.href
-                      ? 'bg-primary text-primary-foreground'
-                      : 'hover:bg-muted text-muted-foreground hover:text-foreground'
+                      ? 'bg-orange-600 text-white'
+                      : 'hover:bg-orange-100 dark:hover:bg-orange-900/30 text-muted-foreground hover:text-foreground'
                   } ${sidebarCollapsed ? 'justify-center' : ''}`}
                 >
                   <item.icon className={cn("h-5 w-5", sidebarCollapsed ? "" : "mr-3")} />
@@ -110,6 +125,21 @@ export default function AdminLayout() {
                 </Link>
               </li>
             ))}
+            
+            {/* Logout button in sidebar */}
+            <li>
+              <button
+                onClick={handleLogout}
+                className={`w-full flex items-center px-3 py-2 rounded-md transition-colors 
+                  hover:bg-red-100 dark:hover:bg-red-900/30 text-red-600 hover:text-red-700
+                  ${sidebarCollapsed ? 'justify-center' : ''}`}
+              >
+                <LogOut className={cn("h-5 w-5", sidebarCollapsed ? "" : "mr-3")} />
+                {!sidebarCollapsed && (
+                  <span>Logout</span>
+                )}
+              </button>
+            </li>
           </ul>
         </nav>
       </aside>
@@ -150,7 +180,7 @@ export default function AdminLayout() {
                   <Button variant="ghost" className="relative h-9 w-9 rounded-full">
                     <Avatar className="h-9 w-9">
                       <AvatarImage src={user?.user_metadata?.avatar_url || ''} alt="Avatar" />
-                      <AvatarFallback>{getInitials()}</AvatarFallback>
+                      <AvatarFallback className="bg-orange-200 text-orange-800">{getInitials()}</AvatarFallback>
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
@@ -177,7 +207,7 @@ export default function AdminLayout() {
         </header>
 
         {/* Main content */}
-        <main className="flex-1 overflow-y-auto bg-muted/30 p-6">
+        <main className="flex-1 overflow-y-auto bg-amber-50/50 dark:bg-muted/30 p-6">
           <Outlet />
         </main>
       </div>
