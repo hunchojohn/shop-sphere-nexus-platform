@@ -58,8 +58,8 @@ const Index = () => {
   return (
     <>
       <Helmet>
-        <title>PapiKicks - Premium Footwear Shopping</title>
-        <meta name="description" content="Shop the latest trends in footwear at PapiKicks. Authentic products, competitive prices, and fast delivery." />
+        <title>BeiPoaHub - Wholesale Discount Store</title>
+        <meta name="description" content="Shop smart and save big at BeiPoaHub. Unbeatable deals on everyday essentials with fast shipping across Kenya." />
       </Helmet>
       
       <div className="min-h-screen flex flex-col bg-white">

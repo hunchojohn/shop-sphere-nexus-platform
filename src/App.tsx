@@ -83,16 +83,16 @@ const App = () => (
       <AuthProvider>
         <CartProvider>
           <Helmet>
-            <title>PapiKicks - Premium Footwear Shopping</title>
-            <meta name="description" content="Shop the latest trends in footwear at PapiKicks. Enjoy premium quality shoes with fast shipping and excellent customer service." />
-            <meta name="keywords" content="online shopping, shoes, footwear, sneakers, premium products, PapiKicks" />
+            <title>BeiPoaHub - Wholesale Discount Store</title>
+            <meta name="description" content="Shop smart and save big at BeiPoaHub. Unbeatable deals on everyday essentials with fast shipping across Kenya." />
+            <meta name="keywords" content="online shopping, discount store, wholesale prices, bei poa, Kenya, affordable products" />
             <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-            <meta property="og:title" content="PapiKicks - Premium Footwear Shopping" />
-            <meta property="og:description" content="Shop the latest trends in footwear at PapiKicks." />
+            <meta property="og:title" content="BeiPoaHub - Wholesale Discount Store" />
+            <meta property="og:description" content="Shop smart and save big at BeiPoaHub. Unbeatable deals on everyday essentials." />
             <meta property="og:type" content="website" />
-            <meta property="og:url" content="https://papikicks.com" />
+            <meta property="og:url" content="https://beipoahub.com" />
             <meta property="og:image" content="/og-image.jpg" />
-            <link rel="canonical" href="https://papikicks.com" />
+            <link rel="canonical" href="https://beipoahub.com" />
           </Helmet>
           <TooltipProvider>
             <Toaster />
