@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Link, Outlet, useLocation } from 'react-router-dom';
+import { Link, Outlet, useLocation, Navigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { 
   ChevronLeft, 
@@ -17,7 +17,6 @@ import {
   LogOut,
   Tag,
   Percent,
-  MessageSquare
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -29,6 +28,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { cn } from '@/lib/utils';
 
 type NavItem = {
   label: string;
@@ -47,10 +47,15 @@ const navItems: NavItem[] = [
 ];
 
 export default function AdminLayout() {
-  const { user, logout } = useAuth();
+  const { user, logout, isAdmin } = useAuth();
   const location = useLocation();
   const { theme, setTheme } = useTheme();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+
+  // Redirect non-admin users to the home page
+  if (!isAdmin) {
+    return <Navigate to="/" replace />;
+  }
 
   const toggleSidebar = () => {
     setSidebarCollapsed(!sidebarCollapsed);
@@ -98,9 +103,9 @@ export default function AdminLayout() {
                       : 'hover:bg-muted text-muted-foreground hover:text-foreground'
                   } ${sidebarCollapsed ? 'justify-center' : ''}`}
                 >
-                  <item.icon className="h-5 w-5" />
+                  <item.icon className={cn("h-5 w-5", sidebarCollapsed ? "" : "mr-3")} />
                   {!sidebarCollapsed && (
-                    <span className="ml-3">{item.label}</span>
+                    <span>{item.label}</span>
                   )}
                 </Link>
               </li>
@@ -157,9 +162,6 @@ export default function AdminLayout() {
                     </p>
                   </div>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild>
-                    <Link to="/admin/profile">Profile</Link>
-                  </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link to="/admin/settings">Settings</Link>
                   </DropdownMenuItem>

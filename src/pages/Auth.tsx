@@ -9,7 +9,7 @@ import RegisterForm from '@/components/auth/RegisterForm';
 import AuthToggle from '@/components/auth/AuthToggle';
 
 export default function Auth() {
-  const { isAuthenticated, login, register } = useAuth();
+  const { isAuthenticated, login, register, isAdmin } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isLoginMode, setIsLoginMode] = useState(true);
@@ -18,9 +18,14 @@ export default function Auth() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate('/');
+      // Redirect admins to the admin dashboard, regular users to homepage
+      if (isAdmin) {
+        navigate('/admin');
+      } else {
+        navigate('/');
+      }
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, navigate, isAdmin]);
 
   const handleLogin = async (email: string, password: string) => {
     setIsLoading(true);
@@ -37,7 +42,8 @@ export default function Auth() {
           title: "Welcome back!",
           description: "You've been logged in successfully.",
         });
-        navigate('/');
+        
+        // Redirect happens in the useEffect above based on isAdmin status
       } else {
         setLoginError(result.message || "Invalid email or password");
         toast({

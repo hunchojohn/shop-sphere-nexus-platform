@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
@@ -23,8 +23,59 @@ import CheckoutSuccess from "./pages/CheckoutSuccess";
 import { CartProvider } from "./context/CartContext";
 import { AuthProvider } from "./context/AuthContext";
 import { ThemeProvider } from "./components/ThemeProvider";
+import { useAuth } from "./context/AuthContext";
 
 const queryClient = new QueryClient();
+
+// Create a protected route component for admin routes
+const AdminRoute = ({ element }: { element: React.ReactNode }) => {
+  const { isAuthenticated, isAdmin } = useAuth();
+  
+  if (!isAuthenticated) {
+    return <Navigate to="/auth" replace />;
+  }
+  
+  if (!isAdmin) {
+    return <Navigate to="/" replace />;
+  }
+  
+  return <>{element}</>;
+};
+
+// Home route that redirects admins to admin panel
+const HomeRoute = () => {
+  const { isAuthenticated, isAdmin } = useAuth();
+  
+  if (isAuthenticated && isAdmin) {
+    return <Navigate to="/admin" replace />;
+  }
+  
+  return <Index />;
+};
+
+// App component needs to be separated from routes to use hooks
+const AppRoutes = () => {
+  return (
+    <Routes>
+      <Route path="/" element={<HomeRoute />} />
+      <Route path="/products" element={<Products />} />
+      <Route path="/auth" element={<Auth />} />
+      <Route path="/admin" element={<AdminLayout />}>
+        <Route index element={<AdminRoute element={<Admin />} />} />
+        <Route path="users" element={<AdminRoute element={<AdminUsers />} />} />
+        <Route path="orders" element={<AdminRoute element={<AdminOrders />} />} />
+        <Route path="products" element={<AdminRoute element={<AdminProducts />} />} />
+        <Route path="analytics" element={<AdminRoute element={<AdminAnalytics />} />} />
+        <Route path="marketing" element={<AdminRoute element={<AdminMarketing />} />} />
+        <Route path="settings" element={<AdminRoute element={<AdminSettings />} />} />
+      </Route>
+      <Route path="/product/:id" element={<ProductDetail />} />
+      <Route path="/checkout" element={<Checkout />} />
+      <Route path="/checkout-success" element={<CheckoutSuccess />} />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  );
+};
 
 const App = () => (
   <ThemeProvider defaultTheme="light">
@@ -47,24 +98,7 @@ const App = () => (
             <Toaster />
             <Sonner />
             <BrowserRouter>
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/products" element={<Products />} />
-                <Route path="/auth" element={<Auth />} />
-                <Route path="/admin" element={<AdminLayout />}>
-                  <Route index element={<Admin />} />
-                  <Route path="users" element={<AdminUsers />} />
-                  <Route path="orders" element={<AdminOrders />} />
-                  <Route path="products" element={<AdminProducts />} />
-                  <Route path="analytics" element={<AdminAnalytics />} />
-                  <Route path="marketing" element={<AdminMarketing />} />
-                  <Route path="settings" element={<AdminSettings />} />
-                </Route>
-                <Route path="/product/:id" element={<ProductDetail />} />
-                <Route path="/checkout" element={<Checkout />} />
-                <Route path="/checkout-success" element={<CheckoutSuccess />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
+              <AppRoutes />
             </BrowserRouter>
           </TooltipProvider>
         </CartProvider>
