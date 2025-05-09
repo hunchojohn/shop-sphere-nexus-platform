@@ -102,12 +102,12 @@ const HeroSection = () => {
             </div>
           </div>
           
-          <div className="md:w-1/2 flex justify-center items-center">
+          <div className="md:w-1/2 flex justify-center items-center relative z-20">
             <div className="relative h-72 w-72 md:h-96 md:w-96">
               {/* Enhanced glow effect with gradient */}
               <div className="deal-glow absolute inset-0 bg-gradient-to-br from-orange-400/30 via-amber-400/30 to-yellow-400/20 rounded-full blur-3xl"></div>
               
-              {/* Animated deals showcase */}
+              {/* Animated deals showcase - Fixed positioning to prevent overlap */}
               <div 
                 ref={dealRef}
                 className="absolute inset-0 flex items-center justify-center"
@@ -116,9 +116,9 @@ const HeroSection = () => {
                   transformStyle: "preserve-3d" 
                 }}
               >
-                <div className="relative">
-                  {/* Main deal tag */}
-                  <div className="bg-white p-6 rounded-xl shadow-xl rotate-3 transform -translate-y-4 absolute">
+                <div className="relative w-full h-full flex items-center justify-center">
+                  {/* Deal tags with improved positioning */}
+                  <div className="bg-white p-6 rounded-xl shadow-xl rotate-3 transform -translate-y-20 -translate-x-10 absolute z-10">
                     <div className="flex items-center gap-3">
                       <Tag className="h-10 w-10 text-orange-500" />
                       <div>
@@ -128,8 +128,7 @@ const HeroSection = () => {
                     </div>
                   </div>
                   
-                  {/* Secondary deal tag */}
-                  <div className="bg-white p-5 rounded-xl shadow-lg -rotate-6 transform translate-x-6 translate-y-12 absolute">
+                  <div className="bg-white p-5 rounded-xl shadow-lg -rotate-6 transform translate-x-20 translate-y-28 absolute z-10">
                     <div className="flex items-center gap-2">
                       <Tag className="h-8 w-8 text-amber-500" />
                       <div>
@@ -139,13 +138,13 @@ const HeroSection = () => {
                     </div>
                   </div>
                   
-                  {/* Main product image */}
-                  <div className="bg-gradient-to-r from-orange-600 to-amber-600 p-5 rounded-xl shadow-2xl rotate-1 transform translate-y-6">
+                  {/* Main product image with adjusted position */}
+                  <div className="bg-gradient-to-r from-orange-600 to-amber-600 p-5 rounded-xl shadow-2xl rotate-1 transform translate-y-0 relative z-0 w-64 md:w-80">
                     <div className="flex items-center justify-center">
                       <img 
                         src="/images/wholesale-products.png" 
                         alt="Discount Wholesale Products" 
-                        className="max-h-[240px] w-auto drop-shadow-xl rounded-lg"
+                        className="max-h-[220px] w-auto drop-shadow-xl rounded-lg"
                       />
                     </div>
                     <div className="mt-3 bg-white/80 backdrop-blur-sm p-2 rounded-lg text-center">

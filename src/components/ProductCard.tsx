@@ -58,14 +58,14 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }) => {
               </Button>
             </div>
           )}
-          <div className="absolute top-2 right-2">
+          <div className="absolute top-2 right-2 flex flex-col gap-1">
             {product.discountPercentage > 0 && (
-              <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded-full">
+              <span className="bg-orange-600 text-white text-xs px-2 py-1 rounded-full">
                 -{product.discountPercentage}%
               </span>
             )}
             {product.isNew && (
-              <span className="bg-green-500 text-white text-xs px-2 py-1 rounded-full ml-1">
+              <span className="bg-green-500 text-white text-xs px-2 py-1 rounded-full">
                 New
               </span>
             )}
@@ -73,7 +73,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }) => {
         </div>
         <div className="p-4 flex-grow flex flex-col justify-between">
           <div>
-            <h3 className="text-sm font-medium line-clamp-2 text-gray-800 mb-1 hover:text-blue-600 transition-colors">
+            <h3 className="text-sm font-medium line-clamp-2 text-gray-800 mb-1 hover:text-orange-600 transition-colors">
               {product.name}
             </h3>
             <div className="text-xs text-gray-500 mb-2">
@@ -82,7 +82,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }) => {
           </div>
           <div className="mt-auto">
             <div className="flex items-center justify-between mb-3">
-              <span className="text-blue-600 font-semibold">
+              <span className="text-orange-600 font-semibold">
                 {formatCurrencyStockX(primaryVariant.price)}
               </span>
               {product.originalPrice > 0 && (
@@ -92,7 +92,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }) => {
               )}
             </div>
             <Button 
-              className="w-full bg-blue-600 hover:bg-blue-700 transition-all duration-300 transform hover:scale-[1.02] hover:shadow-md"
+              className="w-full bg-orange-600 hover:bg-orange-700 transition-all duration-300 transform hover:scale-[1.02] hover:shadow-md"
               size="sm"
               onClick={handleAddToCart}
             >
