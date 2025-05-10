@@ -31,21 +31,21 @@ const Footer = () => {
         {/* Newsletter section */}
         <div className="flex flex-col md:flex-row justify-between items-start mb-12 gap-8">
           <div className="md:w-1/2">
-            <h3 className="text-white text-xl font-semibold mb-4">PapiKicks</h3>
+            <h3 className="text-white text-xl font-semibold mb-4">BeiPoaHub</h3>
             <p className="text-gray-400 mb-4 max-w-md">
-              Your destination for premium footwear with authentic products, competitive prices, and exceptional customer service.
+              Your #1 Online Discount Store in Kenya with authentic products, competitive prices, and exceptional customer service.
             </p>
             <div className="flex space-x-4">
-              <a href="https://facebook.com" className="text-gray-400 hover:text-white transition-colors" aria-label="Facebook">
+              <a href="https://facebook.com" className="text-gray-400 hover:text-orange-400 transition-colors" aria-label="Facebook">
                 <Facebook className="h-5 w-5" />
               </a>
-              <a href="https://instagram.com" className="text-gray-400 hover:text-white transition-colors" aria-label="Instagram">
+              <a href="https://instagram.com" className="text-gray-400 hover:text-orange-400 transition-colors" aria-label="Instagram">
                 <Instagram className="h-5 w-5" />
               </a>
-              <a href="https://twitter.com" className="text-gray-400 hover:text-white transition-colors" aria-label="Twitter">
+              <a href="https://twitter.com" className="text-gray-400 hover:text-orange-400 transition-colors" aria-label="Twitter">
                 <Twitter className="h-5 w-5" />
               </a>
-              <a href="https://linkedin.com" className="text-gray-400 hover:text-white transition-colors" aria-label="LinkedIn">
+              <a href="https://linkedin.com" className="text-gray-400 hover:text-orange-400 transition-colors" aria-label="LinkedIn">
                 <Linkedin className="h-5 w-5" />
               </a>
             </div>
@@ -63,7 +63,7 @@ const Footer = () => {
                 className="bg-gray-800 border-gray-700 text-white"
                 required
               />
-              <Button type="submit" className="whitespace-nowrap">
+              <Button type="submit" className="whitespace-nowrap bg-orange-600 hover:bg-orange-700">
                 <Mail className="h-4 w-4 mr-2" /> Subscribe
               </Button>
             </form>
@@ -75,44 +75,44 @@ const Footer = () => {
           <div>
             <h4 className="text-white font-medium mb-4">Shop</h4>
             <ul className="space-y-2">
-              <li><Link to="/products" className="hover:text-white transition-colors">New Releases</Link></li>
-              <li><Link to="/products?category=men" className="hover:text-white transition-colors">Men's</Link></li>
-              <li><Link to="/products?category=women" className="hover:text-white transition-colors">Women's</Link></li>
-              <li><Link to="/products?category=kids" className="hover:text-white transition-colors">Kids'</Link></li>
+              <li><Link to="/products" className="hover:text-orange-400 transition-colors">New Releases</Link></li>
+              <li><Link to="/products?category=men" className="hover:text-orange-400 transition-colors">Men's</Link></li>
+              <li><Link to="/products?category=women" className="hover:text-orange-400 transition-colors">Women's</Link></li>
+              <li><Link to="/products?category=kids" className="hover:text-orange-400 transition-colors">Kids'</Link></li>
             </ul>
           </div>
           <div>
             <h4 className="text-white font-medium mb-4">Support</h4>
             <ul className="space-y-2">
-              <li><Link to="/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
-              <li><Link to="/faq" className="hover:text-white transition-colors">FAQs</Link></li>
-              <li><Link to="/shipping" className="hover:text-white transition-colors">Shipping & Delivery</Link></li>
-              <li><Link to="/returns" className="hover:text-white transition-colors">Returns & Exchanges</Link></li>
+              <li><Link to="/contact" className="hover:text-orange-400 transition-colors">Contact Us</Link></li>
+              <li><Link to="/faq" className="hover:text-orange-400 transition-colors">FAQs</Link></li>
+              <li><Link to="/shipping" className="hover:text-orange-400 transition-colors">Shipping & Delivery</Link></li>
+              <li><Link to="/returns" className="hover:text-orange-400 transition-colors">Returns & Exchanges</Link></li>
             </ul>
           </div>
           <div>
             <h4 className="text-white font-medium mb-4">Company</h4>
             <ul className="space-y-2">
-              <li><Link to="/about" className="hover:text-white transition-colors">About Us</Link></li>
-              <li><Link to="/careers" className="hover:text-white transition-colors">Careers</Link></li>
-              <li><Link to="/press" className="hover:text-white transition-colors">Press</Link></li>
-              <li><Link to="/affiliates" className="hover:text-white transition-colors">Affiliates</Link></li>
+              <li><Link to="/about" className="hover:text-orange-400 transition-colors">About Us</Link></li>
+              <li><Link to="/careers" className="hover:text-orange-400 transition-colors">Careers</Link></li>
+              <li><Link to="/press" className="hover:text-orange-400 transition-colors">Press</Link></li>
+              <li><Link to="/affiliates" className="hover:text-orange-400 transition-colors">Affiliates</Link></li>
             </ul>
           </div>
           <div>
             <h4 className="text-white font-medium mb-4">Legal</h4>
             <ul className="space-y-2">
-              <li><Link to="/terms" className="hover:text-white transition-colors">Terms & Conditions</Link></li>
-              <li><Link to="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
-              <li><Link to="/cookies" className="hover:text-white transition-colors">Cookie Policy</Link></li>
-              <li><Link to="/accessibility" className="hover:text-white transition-colors">Accessibility</Link></li>
+              <li><Link to="/terms" className="hover:text-orange-400 transition-colors">Terms & Conditions</Link></li>
+              <li><Link to="/privacy" className="hover:text-orange-400 transition-colors">Privacy Policy</Link></li>
+              <li><Link to="/cookies" className="hover:text-orange-400 transition-colors">Cookie Policy</Link></li>
+              <li><Link to="/accessibility" className="hover:text-orange-400 transition-colors">Accessibility</Link></li>
             </ul>
           </div>
         </div>
         
         {/* Copyright */}
         <div className="py-6 text-center text-gray-500 border-t border-gray-800">
-          <p className="text-sm">© {new Date().getFullYear()} PapiKicks. All rights reserved.</p>
+          <p className="text-sm">© {new Date().getFullYear()} BeiPoaHub. All rights reserved.</p>
         </div>
       </div>
     </footer>

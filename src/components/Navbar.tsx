@@ -98,7 +98,7 @@ const Navbar = () => {
               )}
             </Button>
             <Link to="/" className="flex items-center">
-              <h1 className="text-2xl font-bold text-blue-600">PapiKicks</h1>
+              <h1 className="text-2xl font-bold text-orange-600">BeiPoaHub</h1>
             </Link>
           </div>
 
@@ -110,8 +110,8 @@ const Navbar = () => {
                   to="/" 
                   className={cn(
                     navigationMenuTriggerStyle(), 
-                    "text-gray-800 hover:text-blue-600 transition-colors",
-                    location.pathname === "/" && "text-blue-600 font-medium"
+                    "text-gray-800 hover:text-orange-600 transition-colors",
+                    location.pathname === "/" && "text-orange-600 font-medium"
                   )}
                 >
                   Home
@@ -119,7 +119,7 @@ const Navbar = () => {
               </NavigationMenuItem>
               
               <NavigationMenuItem>
-                <NavigationMenuTrigger className="text-gray-800 hover:text-blue-600 transition-colors">
+                <NavigationMenuTrigger className="text-gray-800 hover:text-orange-600 transition-colors">
                   Categories
                 </NavigationMenuTrigger>
                 <NavigationMenuContent>
@@ -128,7 +128,7 @@ const Navbar = () => {
                       <li key={category.name}>
                         <Link
                           to={category.href}
-                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-blue-50 hover:text-blue-600 focus:bg-blue-50 focus:text-blue-600"
+                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-orange-50 hover:text-orange-600 focus:bg-orange-50 focus:text-orange-600"
                         >
                           <div className="text-sm font-medium leading-none">{category.name}</div>
                         </Link>
@@ -143,8 +143,8 @@ const Navbar = () => {
                   to="/products" 
                   className={cn(
                     navigationMenuTriggerStyle(), 
-                    "text-gray-800 hover:text-blue-600 transition-colors",
-                    location.pathname === "/products" && "text-blue-600 font-medium"
+                    "text-gray-800 hover:text-orange-600 transition-colors",
+                    location.pathname === "/products" && "text-orange-600 font-medium"
                   )}
                 >
                   Products
@@ -157,8 +157,8 @@ const Navbar = () => {
                     to="/admin" 
                     className={cn(
                       navigationMenuTriggerStyle(), 
-                      "text-gray-800 hover:text-blue-600 transition-colors",
-                      location.pathname.includes("/admin") && "text-blue-600 font-medium"
+                      "text-gray-800 hover:text-orange-600 transition-colors",
+                      location.pathname.includes("/admin") && "text-orange-600 font-medium"
                     )}
                   >
                     Admin
@@ -176,7 +176,7 @@ const Navbar = () => {
                 placeholder="Search products..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pr-10 w-full bg-gray-100 border-gray-200 focus-visible:ring-blue-600"
+                className="pr-10 w-full bg-gray-100 border-gray-200 focus-visible:ring-orange-600"
               />
               <Button
                 type="submit"
@@ -197,7 +197,7 @@ const Navbar = () => {
                   <Button 
                     variant="ghost" 
                     size="icon" 
-                    className="text-gray-700 hover:text-blue-600 transition-colors"
+                    className="text-gray-700 hover:text-orange-600 transition-colors"
                   >
                     <User className="h-5 w-5" />
                   </Button>
@@ -206,14 +206,14 @@ const Navbar = () => {
                   <div className="px-3 py-2 text-sm font-medium text-gray-700 border-b border-gray-100">
                     {user?.email}
                   </div>
-                  <DropdownMenuItem className="hover:bg-blue-50 hover:text-blue-600 transition-colors">
+                  <DropdownMenuItem className="hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     <Link to="/account" className="w-full">My Account</Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem className="hover:bg-blue-50 hover:text-blue-600 transition-colors">
+                  <DropdownMenuItem className="hover:bg-orange-50 hover:text-orange-600 transition-colors">
                     <Link to="/orders" className="w-full">My Orders</Link>
                   </DropdownMenuItem>
                   {isAdmin && (
-                    <DropdownMenuItem className="hover:bg-blue-50 hover:text-blue-600 transition-colors">
+                    <DropdownMenuItem className="hover:bg-orange-50 hover:text-orange-600 transition-colors">
                       <Link to="/admin" className="w-full">Admin Dashboard</Link>
                     </DropdownMenuItem>
                   )}
@@ -223,7 +223,7 @@ const Navbar = () => {
                       logout();
                       navigate('/auth');
                     }} 
-                    className="text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                    className="text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors"
                   >
                     Sign Out
                   </DropdownMenuItem>
@@ -233,7 +233,7 @@ const Navbar = () => {
               <Button 
                 variant="ghost" 
                 onClick={() => navigate('/auth')} 
-                className="text-gray-700 hover:text-blue-600 transition-colors"
+                className="text-gray-700 hover:text-orange-600 transition-colors"
               >
                 Log In
               </Button>
@@ -244,7 +244,7 @@ const Navbar = () => {
                 variant="ghost"
                 size="icon"
                 onClick={() => navigate('/checkout')}
-                className="relative text-gray-700 hover:text-blue-600 transition-colors"
+                className="relative text-gray-700 hover:text-orange-600 transition-colors"
                 title="Go to checkout"
               >
                 <ShoppingBag className="h-5 w-5" />
@@ -255,11 +255,11 @@ const Navbar = () => {
               variant="ghost"
               size="icon"
               onClick={openCart}
-              className="relative text-gray-700 hover:text-blue-600 transition-colors"
+              className="relative text-gray-700 hover:text-orange-600 transition-colors"
             >
               <ShoppingCart className="h-5 w-5" />
               {getCartCount() > 0 && (
-                <span className="absolute -top-1 -right-1 bg-blue-600 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+                <span className="absolute -top-1 -right-1 bg-orange-600 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
                   {getCartCount()}
                 </span>
               )}
@@ -275,7 +275,7 @@ const Navbar = () => {
               placeholder="Search products..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pr-10 w-full bg-gray-100 border-gray-200 focus-visible:ring-blue-600"
+              className="pr-10 w-full bg-gray-100 border-gray-200 focus-visible:ring-orange-600"
             />
             <Button
               type="submit"

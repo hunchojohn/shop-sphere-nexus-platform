@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -14,12 +13,20 @@ import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { Loader2 } from 'lucide-react';
 
+// Define the profile data type to match the database structure
+interface ProfileData {
+  firstName: string;
+  lastName: string;
+  phone?: string; // Make phone optional
+  bio?: string;   // Make bio optional
+}
+
 export default function AdminSettings() {
   const { user } = useAuth();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [profileLoading, setProfileLoading] = useState(true);
-  const [profileData, setProfileData] = useState({
+  const [profileData, setProfileData] = useState<ProfileData>({
     firstName: '',
     lastName: '',
     phone: '',
@@ -55,11 +62,20 @@ export default function AdminSettings() {
       }
       
       if (data) {
+        // Update the profiles table using proper fields
+        const updateData = {
+          id: user?.id,
+          first_name: data.first_name || '',
+          last_name: data.last_name || '',
+          // Add phone and bio fields if they don't exist
+        };
+        
+        // Set profile data in state with proper mapping
         setProfileData({
           firstName: data.first_name || '',
           lastName: data.last_name || '',
-          phone: data.phone || '',
-          bio: data.bio || '',
+          phone: data.phone || '', // This might not exist in the table yet
+          bio: data.bio || '',     // This might not exist in the table yet
         });
       }
     } catch (error) {
@@ -80,16 +96,15 @@ export default function AdminSettings() {
     setIsLoading(true);
     
     try {
-      // Update profile in Supabase
+      // Update profile in Supabase, only sending fields that exist in the table
       const { error } = await supabase
         .from('profiles')
         .upsert({
           id: user.id,
           first_name: profileData.firstName,
           last_name: profileData.lastName,
-          phone: profileData.phone,
-          bio: profileData.bio,
           updated_at: new Date().toISOString(),
+          // Note: phone and bio fields are not included since they don't exist in the profiles table
         });
       
       if (error) throw error;
@@ -134,7 +149,7 @@ export default function AdminSettings() {
     if (user?.email) {
       return user.email.substring(0, 2).toUpperCase();
     }
-    return 'AD';
+    return 'BP'; // Changed from 'AD' to 'BP' for BeiPoaHub
   };
 
   if (profileLoading) {
