@@ -105,11 +105,11 @@ export default function Auth() {
   return (
     <AuthLayout 
       title="Sign In" 
-      description="Sign in to your PapiKicks account to access your profile, orders, and more."
+      description="Sign in to your BeiPoaHub account to access your profile, orders, and more."
     >
       <div className="space-y-6">
         <div className="space-y-2 text-center">
-          <h1 className="text-3xl font-bold text-blue-600">Welcome to PapiKicks</h1>
+          <h1 className="text-3xl font-bold text-orange-600">Welcome to BeiPoaHub</h1>
           <p className="text-gray-500">Enter your credentials to continue</p>
         </div>
 
@@ -130,7 +130,7 @@ export default function Auth() {
         )}
           
         <div className="text-center text-sm">
-          <Link to="/" className="text-blue-600 hover:underline">
+          <Link to="/" className="text-orange-600 hover:underline">
             Return to home page
           </Link>
         </div>
