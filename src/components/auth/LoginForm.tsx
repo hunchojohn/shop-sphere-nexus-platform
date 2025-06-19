@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { AlertCircle } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 
 interface LoginFormProps {
   onSubmit: (email: string, password: string) => Promise<void>;
@@ -17,15 +18,12 @@ export default function LoginForm({ onSubmit, isLoading, error }: LoginFormProps
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [googleLoading, setGoogleLoading] = useState(false);
+  const [resetLoading, setResetLoading] = useState(false);
+  const { toast } = useToast();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     await onSubmit(email, password);
-  };
-
-  const fillAdminCredentials = () => {
-    setEmail("admin@example.com");
-    setPassword("admin123");
   };
 
   const handleGoogleLogin = async () => {
@@ -45,6 +43,55 @@ export default function LoginForm({ onSubmit, isLoading, error }: LoginFormProps
       console.error('Google login error:', error);
     } finally {
       setGoogleLoading(false);
+    }
+  };
+
+  const handleForgotPassword = async () => {
+    if (!email) {
+      toast({
+        title: "Email Required",
+        description: "Please enter your email address first.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setResetLoading(true);
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/auth/reset-password`,
+      });
+
+      if (error) {
+        toast({
+          title: "Error",
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
+        // Send custom email notification
+        await supabase.functions.invoke('send-email', {
+          body: {
+            type: 'password_reset',
+            email: email,
+            resetLink: `${window.location.origin}/auth/reset-password`
+          }
+        });
+
+        toast({
+          title: "Password Reset Email Sent",
+          description: "Check your email for password reset instructions.",
+        });
+      }
+    } catch (error) {
+      console.error('Password reset error:', error);
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setResetLoading(false);
     }
   };
 
@@ -81,6 +128,18 @@ export default function LoginForm({ onSubmit, isLoading, error }: LoginFormProps
           onChange={(e) => setPassword(e.target.value)}
         />
       </div>
+      
+      <div className="text-right">
+        <button
+          type="button"
+          onClick={handleForgotPassword}
+          disabled={resetLoading}
+          className="text-sm text-orange-600 hover:underline"
+        >
+          {resetLoading ? "Sending..." : "Forgot password?"}
+        </button>
+      </div>
+
       <Button 
         type="submit" 
         className="w-full bg-orange-600 hover:bg-orange-700"
@@ -131,19 +190,6 @@ export default function LoginForm({ onSubmit, isLoading, error }: LoginFormProps
           </>
         )}
       </Button>
-
-      <div className="text-center">
-        <button 
-          type="button"
-          onClick={fillAdminCredentials}
-          className="text-xs text-orange-600 hover:underline"
-        >
-          Use admin credentials
-        </button>
-        <p className="text-xs text-gray-500 mt-1">
-          (Admin: admin@example.com / Password: admin123)
-        </p>
-      </div>
     </form>
   );
 }

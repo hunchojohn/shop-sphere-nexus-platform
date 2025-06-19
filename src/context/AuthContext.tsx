@@ -30,6 +30,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     user.user_metadata?.role === 'admin'
   );
 
+  // Track user activity when they login
+  const trackUserActivity = async (userId: string) => {
+    try {
+      const { error } = await supabase
+        .from('user_activity')
+        .upsert({
+          user_id: userId,
+          last_login: new Date().toISOString()
+        }, {
+          onConflict: 'user_id'
+        });
+      
+      if (error) {
+        console.error('Error tracking user activity:', error);
+      }
+    } catch (error) {
+      console.error('Error tracking user activity:', error);
+    }
+  };
+
   useEffect(() => {
     // Set up auth state listener first
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
@@ -37,6 +57,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         console.log("Auth state changed:", event, currentSession?.user?.email);
         setSession(currentSession);
         setUser(currentSession?.user ?? null);
+        
+        // Track user activity on sign in
+        if (event === 'SIGNED_IN' && currentSession?.user) {
+          setTimeout(() => {
+            trackUserActivity(currentSession.user.id);
+          }, 0);
+        }
       }
     );
 
@@ -45,6 +72,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       console.log("Initial session check:", currentSession?.user?.email);
       setSession(currentSession);
       setUser(currentSession?.user ?? null);
+      
+      // Track activity for existing sessions
+      if (currentSession?.user) {
+        setTimeout(() => {
+          trackUserActivity(currentSession.user.id);
+        }, 0);
+      }
     });
 
     return () => subscription.unsubscribe();
@@ -52,13 +86,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = async (email: string, password: string): Promise<{success: boolean, message: string}> => {
     try {
-      // Log the attempt for debugging
       console.log(`Attempting to login with email: ${email}`);
       
-      // CRITICAL FIX: For demo admin account, create a special case with direct access
       if (email === 'admin@example.com' && password === 'admin123') {
         console.log("Admin demo login detected");
-        // Continue with the normal login process, but we've logged the special case
       }
       
       const { data, error } = await supabase.auth.signInWithPassword({
@@ -81,7 +112,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const register = async (name: string, email: string, password: string): Promise<{success: boolean, message: string}> => {
     try {
-      // Add admin role if registering with admin@example.com
       const metadata = {
         first_name: name,
         role: email === 'admin@example.com' ? 'admin' : 'customer'
