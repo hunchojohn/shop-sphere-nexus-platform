@@ -33,7 +33,8 @@ export default function LoginForm({ onSubmit, isLoading, error }: LoginFormProps
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/`
+          redirectTo: `${window.location.origin}/`,
+          skipBrowserRedirect: false
         }
       });
       

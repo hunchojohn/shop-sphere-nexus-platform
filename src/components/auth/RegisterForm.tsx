@@ -30,7 +30,8 @@ export default function RegisterForm({ onSubmit, isLoading, error }: RegisterFor
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/`
+          redirectTo: `${window.location.origin}/`,
+          skipBrowserRedirect: false
         }
       });
       
