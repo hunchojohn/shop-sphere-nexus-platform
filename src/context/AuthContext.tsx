@@ -10,6 +10,7 @@ interface AuthContextType {
   isAdmin: boolean;
   login: (email: string, password: string) => Promise<{success: boolean, message: string}>;
   register: (name: string, email: string, password: string) => Promise<{success: boolean, message: string}>;
+  resetPassword: (email: string) => Promise<{success: boolean, message: string}>;
   logout: () => Promise<void>;
 }
 
@@ -88,10 +89,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       console.log(`Attempting to login with email: ${email}`);
       
-      if (email === 'admin@example.com' && password === 'admin123') {
-        console.log("Admin demo login detected");
-      }
-      
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -138,6 +135,42 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const resetPassword = async (email: string): Promise<{success: boolean, message: string}> => {
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/auth?mode=reset`,
+      });
+      
+      if (error) {
+        console.error("Password reset error:", error.message);
+        return { success: false, message: error.message };
+      }
+      
+      // Send email notification
+      try {
+        await fetch(`${supabase.supabaseUrl}/functions/v1/send-email`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${supabase.supabaseKey}`,
+          },
+          body: JSON.stringify({
+            type: 'password_reset',
+            email: email,
+            resetLink: `${window.location.origin}/auth?mode=reset`,
+          }),
+        });
+      } catch (emailError) {
+        console.error('Error sending password reset email:', emailError);
+      }
+      
+      return { success: true, message: "Password reset email sent successfully" };
+    } catch (error: any) {
+      console.error("Password reset error:", error?.message || error);
+      return { success: false, message: "An unexpected error occurred" };
+    }
+  };
+
   const logout = async () => {
     await supabase.auth.signOut();
   };
@@ -149,6 +182,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     isAdmin,
     login,
     register,
+    resetPassword,
     logout
   };
 

@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { AlertCircle } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/context/AuthContext';
 
 interface LoginFormProps {
   onSubmit: (email: string, password: string) => Promise<void>;
@@ -19,7 +19,8 @@ export default function LoginForm({ onSubmit, isLoading, error }: LoginFormProps
   const [password, setPassword] = useState('');
   const [googleLoading, setGoogleLoading] = useState(false);
   const [resetLoading, setResetLoading] = useState(false);
-  const { toast } = useToast();
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const { resetPassword } = useAuth();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -48,48 +49,22 @@ export default function LoginForm({ onSubmit, isLoading, error }: LoginFormProps
 
   const handleForgotPassword = async () => {
     if (!email) {
-      toast({
-        title: "Email Required",
-        description: "Please enter your email address first.",
-        variant: "destructive",
-      });
+      alert('Please enter your email address first');
       return;
     }
 
     setResetLoading(true);
     try {
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/auth/reset-password`,
-      });
-
-      if (error) {
-        toast({
-          title: "Error",
-          description: error.message,
-          variant: "destructive",
-        });
+      const result = await resetPassword(email);
+      if (result.success) {
+        alert('Password reset email sent! Check your inbox.');
+        setShowForgotPassword(false);
       } else {
-        // Send custom email notification
-        await supabase.functions.invoke('send-email', {
-          body: {
-            type: 'password_reset',
-            email: email,
-            resetLink: `${window.location.origin}/auth/reset-password`
-          }
-        });
-
-        toast({
-          title: "Password Reset Email Sent",
-          description: "Check your email for password reset instructions.",
-        });
+        alert(result.message);
       }
     } catch (error) {
       console.error('Password reset error:', error);
-      toast({
-        title: "Error",
-        description: "An unexpected error occurred. Please try again.",
-        variant: "destructive",
-      });
+      alert('An error occurred while sending the reset email');
     } finally {
       setResetLoading(false);
     }
@@ -105,9 +80,9 @@ export default function LoginForm({ onSubmit, isLoading, error }: LoginFormProps
       )}
       
       <div className="space-y-2">
-        <Label htmlFor="email">Email</Label>
+        <Label htmlFor="login-email">Email</Label>
         <Input 
-          id="email" 
+          id="login-email" 
           name="email" 
           type="email" 
           required 
@@ -117,9 +92,9 @@ export default function LoginForm({ onSubmit, isLoading, error }: LoginFormProps
         />
       </div>
       <div className="space-y-2">
-        <Label htmlFor="password">Password</Label>
+        <Label htmlFor="login-password">Password</Label>
         <Input 
-          id="password" 
+          id="login-password" 
           name="password" 
           type="password" 
           required 
@@ -129,23 +104,39 @@ export default function LoginForm({ onSubmit, isLoading, error }: LoginFormProps
         />
       </div>
       
-      <div className="text-right">
-        <button
+      <div className="flex items-center justify-between">
+        <Button
           type="button"
-          onClick={handleForgotPassword}
-          disabled={resetLoading}
-          className="text-sm text-orange-600 hover:underline"
+          variant="link"
+          className="p-0 h-auto text-orange-600 hover:text-orange-700"
+          onClick={() => setShowForgotPassword(!showForgotPassword)}
         >
-          {resetLoading ? "Sending..." : "Forgot password?"}
-        </button>
+          Forgot password?
+        </Button>
       </div>
 
+      {showForgotPassword && (
+        <div className="p-4 bg-orange-50 rounded-lg border">
+          <p className="text-sm text-gray-600 mb-3">
+            Enter your email address and we'll send you a link to reset your password.
+          </p>
+          <Button
+            type="button"
+            onClick={handleForgotPassword}
+            disabled={resetLoading || !email}
+            className="w-full bg-orange-600 hover:bg-orange-700"
+          >
+            {resetLoading ? "Sending..." : "Send Reset Email"}
+          </Button>
+        </div>
+      )}
+      
       <Button 
         type="submit" 
         className="w-full bg-orange-600 hover:bg-orange-700"
         disabled={isLoading}
       >
-        {isLoading ? "Signing in..." : "Sign In"}
+        {isLoading ? "Signing In..." : "Sign In"}
       </Button>
 
       <div className="relative">
