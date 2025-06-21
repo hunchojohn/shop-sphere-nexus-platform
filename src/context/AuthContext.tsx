@@ -146,13 +146,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return { success: false, message: error.message };
       }
       
-      // Send email notification
+      // Send email notification using the direct Supabase URL
       try {
-        await fetch(`${supabase.supabaseUrl}/functions/v1/send-email`, {
+        await fetch(`https://qiirroanuepnmpqdvibs.supabase.co/functions/v1/send-email`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${supabase.supabaseKey}`,
+            'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFpaXJyb2FudWVwbm1wcWR2aWJzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU4MzQ0MjMsImV4cCI6MjA2MTQxMDQyM30.2YGph6FZ8hsyGfTKsH4kH3ZGLw5h5FwVKNBojyA6pdM`,
           },
           body: JSON.stringify({
             type: 'password_reset',
