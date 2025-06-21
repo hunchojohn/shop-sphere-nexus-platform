@@ -91,10 +91,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
-        password,
-        options: {
-          captchaToken: undefined // Explicitly set to undefined to avoid captcha issues
-        }
+        password
       });
       
       if (error) {
@@ -122,7 +119,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         password,
         options: {
           data: metadata,
-          captchaToken: undefined, // Explicitly set to undefined to avoid captcha issues
           emailRedirectTo: `${window.location.origin}/`
         }
       });
@@ -143,8 +139,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const resetPassword = async (email: string): Promise<{success: boolean, message: string}> => {
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/auth?mode=reset`,
-        captchaToken: undefined // Explicitly set to undefined to avoid captcha issues
+        redirectTo: `${window.location.origin}/auth?mode=reset`
       });
       
       if (error) {
